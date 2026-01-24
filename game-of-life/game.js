@@ -58,7 +58,7 @@ async function renderWord() {
     display.appendChild(letterInPixs);
     display.appendChild(space);
   }
-  initPixelToggle();
+  allowDrawing();
 }
 
 async function fetchAlphabethBitmap() {
@@ -115,19 +115,20 @@ document.addEventListener('keypress', renderScreen);
 runButton.addEventListener('click', renderWord);
 
 renderScreen(0);
-initPixelToggle();
+allowDrawing();
 
-function initPixelToggle() {
+function allowDrawing() {
   document.querySelectorAll('table').forEach((table) => {
-    table
-      .addEventListener('pointerover', (e) => {
-        if (e.buttons > 0) {
-          e.target.classList.toggle('full');
-        }
-      });
-
-      table.addEventListener('click', (e) => {
+    table.addEventListener('pointerover', (e) => {
+      if (e.buttons > 0 && e.target.nodeName == 'TD') {
         e.target.classList.toggle('full');
-      });
+      }
+    });
+
+    table.addEventListener('click', (e) => {
+      if (e.target.nodeName == 'TD') {
+        e.target.classList.toggle('full');
+      }
+    });
   });
 }
