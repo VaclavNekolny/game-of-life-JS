@@ -1,12 +1,15 @@
+// const display = document.getElementById('display-word');
 const runButton = document.querySelector('button');
 const input = document.querySelector('input');
-const display = document.getElementById('display-word');
 const textBar = document.getElementById('text-bar');
 
 const grid = document.querySelector('.grid');
 
 const GRID_W = 60;
 const GRID_H = 40;
+drawEmptyGrid(GRID_W, GRID_H);
+allowDrawing();
+
 
 function createTable(x, y, fillRandomly) {
   const table = document.createElement('table');
@@ -39,6 +42,13 @@ function drawEmptyGrid(x, y) {
   }
 }
 
+function getCell(x, y) {
+  if (x > GRID_W - 1 || y > GRID_H - 1) {
+    throw new Error('out of range');
+  }
+  return grid.children[y * GRID_W + x];
+}
+
 function handleKeypress(e) {
   console.log(e);
   // Render screen
@@ -57,6 +67,29 @@ function handleKeypress(e) {
   allowDrawing();
 }
 
+function allowDrawing() {
+  grid.addEventListener('click', (e) => {
+    if (e.target.classList.contains('cell')) {
+      e.target.classList.toggle('full');
+    }
+  });
+  
+  grid.addEventListener('pointerover', (e) => {
+    if (e.target.classList.contains('cell') && e.buttons > 0) {
+      e.target.classList.toggle('full');
+    }
+  });
+}
+
+
+document.addEventListener('keypress', handleKeypress);
+runButton.addEventListener('click', renderWord);
+
+
+
+
+
+// DEPRECATED
 async function renderWord() {
   if (!input.value) {
     console.error('Input text, please!');
@@ -125,23 +158,3 @@ function renderSpace() {
   }
   return table;
 }
-
-document.addEventListener('keypress', handleKeypress);
-runButton.addEventListener('click', renderWord);
-
-function allowDrawing() {
-  grid.addEventListener('click', (e) => {
-    if (e.target.classList.contains('cell')) {
-      e.target.classList.toggle('full');
-    }
-  });
-
-  grid.addEventListener('pointerover', (e) => {
-    if (e.target.classList.contains('cell') && e.buttons > 0) {
-      e.target.classList.toggle('full');
-    }
-  });
-}
-
-drawEmptyGrid(GRID_W, GRID_H);
-allowDrawing();
