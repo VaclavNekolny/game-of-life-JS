@@ -7,9 +7,9 @@ const grid = document.querySelector('.grid');
 
 const GRID_W = 60;
 const GRID_H = 40;
+let pointer = [0, 0];
 drawEmptyGrid(GRID_W, GRID_H);
 allowDrawing();
-
 
 function createTable(x, y, fillRandomly) {
   const table = document.createElement('table');
@@ -43,7 +43,7 @@ function drawEmptyGrid(x, y) {
 }
 
 function getCell(x, y) {
-  if (x > GRID_W - 1 || y > GRID_H - 1) {
+  if (x > GRID_H - 1 || y > GRID_W - 1) {
     throw new Error('out of range');
   }
   return grid.children[y * GRID_W + x];
@@ -56,9 +56,10 @@ function handleKeypress(e) {
     document.body.querySelector('table')?.remove();
     const screenTable = createTable(25, 60, true); // randomly filled table
     document.body.prepend(screenTable);
-  }
-  if (e.code == 'Space') {
+  } else if (e.code == 'Space') {
     textBar.toggleAttribute('hidden');
+  } else if (e.key == 'x') {
+    renderBitmapLetter('f', GRID_W, GRID_H);
   } else {
     document.body.querySelector('table')?.remove();
     const screenTable = createTable(25, 60, false); // empty table
@@ -73,7 +74,7 @@ function allowDrawing() {
       e.target.classList.toggle('full');
     }
   });
-  
+
   grid.addEventListener('pointerover', (e) => {
     if (e.target.classList.contains('cell') && e.buttons > 0) {
       e.target.classList.toggle('full');
@@ -81,23 +82,17 @@ function allowDrawing() {
   });
 }
 
-
 document.addEventListener('keypress', handleKeypress);
-runButton.addEventListener('click', renderWord);
+runButton.addEventListener('click', renderWordFromInput);
 
-
-
-
-
-// DEPRECATED
-async function renderWord() {
+async function renderWordFromInput() {
   if (!input.value) {
     console.error('Input text, please!');
     return;
   }
 
   const wordArray = input.value.split('');
-  console.log(wordArray);
+  // console.log(wordArray);
 
   for (const letter of wordArray) {
     const letterInPixs = await renderBitmapLetter(letter);
@@ -109,6 +104,7 @@ async function renderWord() {
   allowDrawing();
 }
 
+// DEPRECATED
 async function fetchAlphabethBitmap() {
   try {
     const res = await fetch('./monogram-bitmap.json');
@@ -121,30 +117,36 @@ async function fetchAlphabethBitmap() {
   }
 }
 
-async function renderBitmapLetter(letter) {
+async function renderBitmapLetter(letter, x, y) {
+  // TODO: refactor -> distinguish fetch from the function
   const font = await fetchAlphabethBitmap();
   const letterBmp = await font[letter];
 
+  console.log('renderBitmapLetter');
   console.log(letterBmp);
+  let curPointer = [pointer];
+  console.log(curPointer);
 
-  const table = document.createElement('table');
-  table.id = 'letter';
-
-  await letterBmp.forEach((n) => {
-    const tr = document.createElement('tr');
-    const pixelRow = n.toString(2).padStart(5, '0');
-
+  for (let i = 0; i < letterBmp.length; i++) {
+    // convert to binary
+    const pixelRow = letterBmp[i].toString(2).padStart(5, '0');
     const rowArray = pixelRow.split('');
-    rowArray.forEach((pix) => {
-      const td = document.createElement('td');
-      if (pix == '1') {
-        td.classList.add('full');
+    for (let j = 0; j < rowArray.length; j++) {
+      if (rowArray[j] == '1'){
+        getCell(i,j).classList.add("full")
       }
-      tr.prepend(td);
-    });
-    table.appendChild(tr);
-  });
-  return table;
+    }
+  }
+ 
+  //   rowArray.forEach((pix) => {
+  //     const td = document.createElement('td');
+  //     if (pix == '1') {
+  //       td.classList.add('full');
+  //     }
+  //     tr.prepend(td);
+  //   });
+  //   table.appendChild(tr);
+  // });
 }
 
 function renderSpace() {
