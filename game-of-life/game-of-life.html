@@ -11,8 +11,33 @@
       <input type="text" maxlength="10" />
       <button>RUN</button>
     </div>
+    <div id="color-picker">
+      <input
+        class="slider"
+        type="range"
+        name="hue"
+        id="hue"
+        min="0"
+        max="360"
+      />
+      <input
+        class="slider"
+        type="range"
+        name="saturation"
+        id="saturation"
+        min="60"
+        max="80"
+      />
+      <input
+        class="slider"
+        type="range"
+        name="lightness"
+        id="lightness"
+        min="70"
+        max="80"
+      />
+    </div>
     <div class="grid"></div>
-    <div id="display-word" hidden></div>
     <script src="game.js"></script>
   </body>
 </html>
