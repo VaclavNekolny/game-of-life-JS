@@ -5,7 +5,7 @@
 }
 
 body {
-  background-color: blanchedalmond;
+  background-color: hsl(36, 83%, 88%);
   width: 100vw;
   height: 100vh;
 }
@@ -20,11 +20,7 @@ body {
   border: 1px solid rgb(174, 147, 147);
 }
 
-.full {
-  background-color: red;
-}
-
-#text-field {
+#text-bar {
   position: absolute;
   z-index: 10;
   left: calc(50% - 280px); /* tohle je prasárna :D */
@@ -35,7 +31,7 @@ body {
   border-radius: 100px;
 }
 
-#text-field input {
+#text-bar input {
   font-size: 2.8rem;
   width: 380px;
   border-radius: 100px;
@@ -44,7 +40,7 @@ body {
   text-align: center;
 }
 
-#text-field button {
+#text-bar button {
   font-size: 1.5rem;
   width: 70px;
   height: 70px;
@@ -65,5 +61,24 @@ body {
 }
 
 #display-word {
-    display: flex;
+  display: flex;
+}
+
+.grid {
+  width: 100vw;
+  height: 100vh;
+
+  display: grid;
+  grid-template-columns: repeat(60, 1fr);
+  grid-template-rows: repeat(40, 1fr);
+}
+
+.cell {
+  border: 1px solid hsla(36, 60%, 80%, 0.5);
+  background-color: hsl(36, 100%, 90%);
+  border-radius: 10px;
+}
+
+.full {
+  background-color: red;
 }

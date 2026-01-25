@@ -1,6 +1,9 @@
 const runButton = document.querySelector('button');
 const input = document.querySelector('input');
 const display = document.getElementById('display-word');
+const textBar = document.getElementById('text-bar');
+
+const grid = document.querySelector('.grid');
 
 const GRID_W = 60;
 const GRID_H = 40;
@@ -25,20 +28,34 @@ function createTable(x, y, fillRandomly) {
   return table;
 }
 
-function renderScreen(e) {
-  // Render screen
-      if (e.key == 'r') {
-        document.body.querySelector('table')?.remove();
-        const screenTable = createTable(25, 60, true);  // randomly filled table 
-        document.body.prepend(screenTable);
-      }
-      else {
-        document.body.querySelector('table')?.remove();
-        const screenTable = createTable(25, 60, false); // empty table 
-        document.body.prepend(screenTable);
-      }
-      allowDrawing()
+function drawEmptyGrid(x, y) {
+  console.log('empty grid');
+  const grid = document.querySelector('.grid');
+
+  for (let i = 0; i < 60 * 40; i++) {
+    const cell = document.createElement('div');
+    cell.className = 'cell';
+    grid.appendChild(cell);
   }
+}
+
+function handleKeypress(e) {
+  console.log(e);
+  // Render screen
+  if (e.key == 'r') {
+    document.body.querySelector('table')?.remove();
+    const screenTable = createTable(25, 60, true); // randomly filled table
+    document.body.prepend(screenTable);
+  }
+  if (e.code == 'Space') {
+    textBar.toggleAttribute('hidden');
+  } else {
+    document.body.querySelector('table')?.remove();
+    const screenTable = createTable(25, 60, false); // empty table
+    document.body.prepend(screenTable);
+  }
+  allowDrawing();
+}
 
 async function renderWord() {
   if (!input.value) {
@@ -109,24 +126,22 @@ function renderSpace() {
   return table;
 }
 
-document.addEventListener('keypress', renderScreen);
+document.addEventListener('keypress', handleKeypress);
 runButton.addEventListener('click', renderWord);
 
-renderScreen(0);
-allowDrawing();
-
 function allowDrawing() {
-  document.querySelectorAll('table').forEach((table) => {
-    table.addEventListener('pointerover', (e) => {
-      if (e.buttons > 0 && e.target.nodeName == 'TD') {
-        e.target.classList.toggle('full');
-      }
-    });
+  grid.addEventListener('click', (e) => {
+    if (e.target.classList.contains('cell')) {
+      e.target.classList.toggle('full');
+    }
+  });
 
-    table.addEventListener('click', (e) => {
-      if (e.target.nodeName == 'TD') {
-        e.target.classList.toggle('full');
-      }
-    });
+  grid.addEventListener('pointerover', (e) => {
+    if (e.target.classList.contains('cell') && e.buttons > 0) {
+      e.target.classList.toggle('full');
+    }
   });
 }
+
+drawEmptyGrid(GRID_W, GRID_H);
+allowDrawing();
