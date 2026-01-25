@@ -50,10 +50,12 @@ function getColor() {
 }
 
 function handleKeypress(e) {
-  console.log(e);
   // Render screen
   if (e.code == 'Space') {
-    textBar.classList.toggle('show');
+    textBar.classList.add('show');
+  }
+  if (e.key === 'Escape') {
+    textBar.classList.remove('show');
   }
   allowDrawing();
 }
@@ -153,12 +155,12 @@ function switchMode() {
   }
 }
 
-document.addEventListener('keypress', handleKeypress);
+document.addEventListener('keydown', handleKeypress);
 runButton.addEventListener('click', renderWordFromInput);
 document.querySelectorAll('.slider').forEach((slider) => {
   slider.addEventListener('input', getColor);
 });
-document.getElementById('mode').addEventListener('click', switchMode)
+document.getElementById('mode').addEventListener('click', switchMode);
 
 allowDrawing();
 
