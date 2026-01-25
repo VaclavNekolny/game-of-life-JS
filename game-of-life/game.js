@@ -14,32 +14,15 @@ const GRID_H = 40;
 let pointer = [0, 20];
 drawEmptyGrid(GRID_W, GRID_H);
 
-function createTable(x, y, fillRandomly) {
-  const table = document.createElement('table');
-  table.id = 'board';
-  for (let i = 0; i < x; i++) {
-    const tableRow = document.createElement('tr');
-
-    for (let j = 0; j < y; j++) {
-      const cell = document.createElement('td');
-
-      if (fillRandomly && Math.random() > 0.5) {
-        cell.classList.add('full');
-      }
-
-      tableRow.appendChild(cell);
-    }
-    table.appendChild(tableRow);
-  }
-  return table;
-}
 
 function drawEmptyGrid(x, y) {
   const grid = document.querySelector('.grid');
 
-  for (let i = 0; i < 60 * 40; i++) {
+  for (let i = 0; i < GRID_W * GRID_H; i++) {
     const cell = document.createElement('div');
     cell.className = 'cell';
+    cell.setAttribute('x', (i / GRID_W).toFixed());
+    cell.setAttribute('y', i % GRID_W);
     grid.appendChild(cell);
   }
 }
@@ -72,19 +55,7 @@ function handleKeypress(e) {
     document.body.prepend(screenTable);
   } else if (e.code == 'Space') {
     textBar.toggleAttribute('hidden');
-  } else if (e.key == 'x') {
-    renderBitmapLetter('M');
-    renderBitmapLetter('I');
-    renderBitmapLetter('L');
-    renderBitmapLetter('K');
-    renderBitmapLetter('A');
-    renderBitmapLetter('T');
-    renderBitmapLetter('T');
-  } else {
-    document.body.querySelector('table')?.remove();
-    const screenTable = createTable(25, 60, false); // empty table
-    document.body.prepend(screenTable);
-  }
+  } 
   allowDrawing();
 }
 
@@ -93,7 +64,8 @@ function allowDrawing() {
     if (e.target.classList.contains('cell')) {
       e.target.classList.toggle('full');
     }
-    
+    pointer = [e.target.getAttribute('x'), e.target.getAttribute('y')];
+    console.log(pointer);
   });
 
   grid.addEventListener('pointerover', (e) => {
@@ -110,16 +82,9 @@ async function renderWordFromInput() {
   }
 
   const wordArray = input.value.split('');
-  // console.log(wordArray);
-
-  for (const letter of wordArray) {
-    const letterInPixs = await renderBitmapLetter(letter);
-    const space = renderSpace();
-
-    display.appendChild(letterInPixs);
-    display.appendChild(space);
+  for (letter of wordArray) {
+    renderBitmapLetter(letter)
   }
-  allowDrawing();
 }
 
 async function fetchAlphabethBitmap() {
@@ -165,3 +130,25 @@ document.querySelectorAll('.slider').forEach((slider) => {
 });
 
 allowDrawing();
+
+
+// DEPRECATED
+function createTable(x, y, fillRandomly) {
+  const table = document.createElement('table');
+  table.id = 'board';
+  for (let i = 0; i < x; i++) {
+    const tableRow = document.createElement('tr');
+
+    for (let j = 0; j < y; j++) {
+      const cell = document.createElement('td');
+
+      if (fillRandomly && Math.random() > 0.5) {
+        cell.classList.add('full');
+      }
+
+      tableRow.appendChild(cell);
+    }
+    table.appendChild(tableRow);
+  }
+  return table;
+}
