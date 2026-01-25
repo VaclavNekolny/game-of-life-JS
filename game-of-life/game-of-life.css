@@ -5,14 +5,17 @@
 }
 
 :root {
-   --color: hsl(180, 70%, 80%);
-   --color-dark: hsla(180, 90%, 40%, 0.9);
-   --grid-col: 0;
-   --grid-row: 0;
+  --color: hsl(180, 70%, 80%);
+  --color-dark: hsla(180, 90%, 40%, 0.9);
+  --grid-col: 0;
+  --grid-row: 0;
+  --body-background: hsl(36, 83%, 88%);
+  --cell-background: hsl(36, 100%, 90%);
+  --cell-border-color: hsla(36, 60%, 80%, 0.5);
 }
 
 body {
-  background-color: hsl(36, 83%, 88%);
+  background-color: var(--body-background);
   width: 100vw;
   height: 100vh;
 }
@@ -24,9 +27,19 @@ body {
   top: 15vh;
 
   padding: 40px 40px 40px 60px;
-  background-color: var(--color-dark) ;
+  background-color: var(--color-dark);
   border-radius: 100px;
   box-shadow: 10px 10px 40px var(--color-dark);
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 0.4s ease,
+    visibility 0.4s ease;
+}
+
+#text-bar.show {
+  opacity: 1;
+  visibility: visible;
 }
 
 #text-bar input {
@@ -60,8 +73,8 @@ body {
 }
 
 .cell {
-  border: 1px solid hsla(36, 60%, 80%, 0.5);
-  background-color: hsl(36, 100%, 90%);
+  border: 1px solid var(--cell-border-color);
+  background-color: var(--cell-background);
   border-radius: 5px;
 }
 
@@ -87,12 +100,28 @@ body {
 
 } */
 
-input[type="range"]::-webkit-slider-runnable-track {
+input[type='range']::-webkit-slider-runnable-track {
   height: 10px;
   background: hsl(221, 66%, 76%);
   border-radius: 10px;
 }
 
-input[type="range"]::-webkit-slider-thumb {
+input[type='range']::-webkit-slider-thumb {
   background: hsl(221, 100%, 100%);
+}
+
+#mode {
+  padding: 10px 20px;
+  background-color: hsl(221, 66%, 76%);
+  text-align: center;
+  border-radius: 10px;
+  color: hsl(221, 20%, 30%);
+  transition: 0.1s ease-in-out;
+  user-select: none;
+}
+
+#mode:hover {
+  background-color: hsl(221, 36%, 56%);
+  color: hsl(221, 100%, 100%);
+  cursor: pointer;
 }

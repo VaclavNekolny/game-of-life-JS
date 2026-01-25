@@ -8,14 +8,14 @@ let color = 'hsl(180, 50%, 50%)';
 const hue = document.getElementById('hue');
 const saturation = document.getElementById('saturation');
 const lightness = document.getElementById('lightness');
+let isDarkMode = false;
 
 const GRID_COL = 40;
-const GRID_ROW = 30;
+const GRID_ROW = 20;
 document.documentElement.style.setProperty('--grid-col', GRID_COL);
 document.documentElement.style.setProperty('--grid-row', GRID_ROW);
 
-
-let pointer = [0, 10];
+let pointer = [4, 5];
 drawEmptyGrid(GRID_COL, GRID_ROW);
 
 function drawEmptyGrid(x, y) {
@@ -53,7 +53,7 @@ function handleKeypress(e) {
   console.log(e);
   // Render screen
   if (e.code == 'Space') {
-    textBar.toggleAttribute('hidden');
+    textBar.classList.toggle('show');
   }
   allowDrawing();
 }
@@ -104,7 +104,6 @@ async function renderBitmapLetter(letter) {
 
   console.log('renderBitmapLetter');
   console.log(letterBmp);
-  debugger;
   let [x, y] = pointer;
 
   for (let i = 0; i < letterBmp.length; i++) {
@@ -122,11 +121,44 @@ async function renderBitmapLetter(letter) {
   pointer[0] = pointer[0] + 6;
 }
 
+function switchMode() {
+  if (isDarkMode) {
+    document.documentElement.style.setProperty(
+      '--body-background',
+      'hsl(36, 83%, 88%)',
+    );
+    document.documentElement.style.setProperty(
+      '--cell-background',
+      'hsl(36, 100%, 90%)',
+    );
+    document.documentElement.style.setProperty(
+      '--cell-border-color',
+      'hsla(36, 60%, 80%, 0.5)',
+    );
+    isDarkMode = false;
+  } else {
+    document.documentElement.style.setProperty(
+      '--body-background',
+      'hsl(36, 5%, 10%)',
+    );
+    document.documentElement.style.setProperty(
+      '--cell-background',
+      'hsl(36, 10%, 15%)',
+    );
+    document.documentElement.style.setProperty(
+      '--cell-border-color',
+      'hsla(36, 7%, 7%, 0.5)',
+    );
+    isDarkMode = true;
+  }
+}
+
 document.addEventListener('keypress', handleKeypress);
 runButton.addEventListener('click', renderWordFromInput);
 document.querySelectorAll('.slider').forEach((slider) => {
   slider.addEventListener('input', getColor);
 });
+document.getElementById('mode').addEventListener('click', switchMode)
 
 allowDrawing();
 
