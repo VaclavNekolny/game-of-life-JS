@@ -9,29 +9,32 @@ const hue = document.getElementById('hue');
 const saturation = document.getElementById('saturation');
 const lightness = document.getElementById('lightness');
 
-const GRID_W = 60;
-const GRID_H = 40;
-let pointer = [0, 20];
-drawEmptyGrid(GRID_W, GRID_H);
+const GRID_COL = 40;
+const GRID_ROW = 30;
+document.documentElement.style.setProperty('--grid-col', GRID_COL);
+document.documentElement.style.setProperty('--grid-row', GRID_ROW);
 
+
+let pointer = [0, 10];
+drawEmptyGrid(GRID_COL, GRID_ROW);
 
 function drawEmptyGrid(x, y) {
   const grid = document.querySelector('.grid');
 
-  for (let i = 0; i < GRID_W * GRID_H; i++) {
+  for (let i = 0; i < GRID_COL * GRID_ROW; i++) {
     const cell = document.createElement('div');
     cell.className = 'cell';
-    cell.setAttribute('x', (i / GRID_W).toFixed());
-    cell.setAttribute('y', i % GRID_W);
+    cell.setAttribute('x', (i / GRID_COL).toFixed());
+    cell.setAttribute('y', i % GRID_COL);
     grid.appendChild(cell);
   }
 }
 
 function getCell(x, y) {
-  if (x > GRID_W - 1 || y > GRID_H - 1) {
+  if (x > GRID_COL - 1 || y > GRID_ROW - 1) {
     throw new Error('out of range');
   }
-  return grid.children[y * GRID_W + x];
+  return grid.children[y * GRID_COL + x];
 }
 
 function getColor() {
@@ -49,13 +52,9 @@ function getColor() {
 function handleKeypress(e) {
   console.log(e);
   // Render screen
-  if (e.key == 'r') {
-    document.body.querySelector('table')?.remove();
-    const screenTable = createTable(25, 60, true); // randomly filled table
-    document.body.prepend(screenTable);
-  } else if (e.code == 'Space') {
+  if (e.code == 'Space') {
     textBar.toggleAttribute('hidden');
-  } 
+  }
   allowDrawing();
 }
 
@@ -64,8 +63,7 @@ function allowDrawing() {
     if (e.target.classList.contains('cell')) {
       e.target.classList.toggle('full');
     }
-    pointer = [e.target.getAttribute('x'), e.target.getAttribute('y')];
-    console.log(pointer);
+    pointer = [e.target.getAttribute('y'), e.target.getAttribute('x')];
   });
 
   grid.addEventListener('pointerover', (e) => {
@@ -83,7 +81,7 @@ async function renderWordFromInput() {
 
   const wordArray = input.value.split('');
   for (letter of wordArray) {
-    renderBitmapLetter(letter)
+    renderBitmapLetter(letter);
   }
 }
 
@@ -106,6 +104,7 @@ async function renderBitmapLetter(letter) {
 
   console.log('renderBitmapLetter');
   console.log(letterBmp);
+  debugger;
   let [x, y] = pointer;
 
   for (let i = 0; i < letterBmp.length; i++) {
@@ -114,7 +113,7 @@ async function renderBitmapLetter(letter) {
     const rowArray = pixelRow.split('').reverse(); // why I need reverse?
     for (let j = 0; j < rowArray.length; j++) {
       if (rowArray[j] == '1') {
-        getCell(j + x, i + y).classList.add('full');
+        getCell(+j + +x, +i + +y).classList.add('full');
       }
     }
   }
@@ -130,7 +129,6 @@ document.querySelectorAll('.slider').forEach((slider) => {
 });
 
 allowDrawing();
-
 
 // DEPRECATED
 function createTable(x, y, fillRandomly) {

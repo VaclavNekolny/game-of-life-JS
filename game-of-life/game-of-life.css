@@ -7,22 +7,14 @@
 :root {
    --color: hsl(180, 70%, 80%);
    --color-dark: hsla(180, 90%, 40%, 0.9);
+   --grid-col: 0;
+   --grid-row: 0;
 }
 
 body {
   background-color: hsl(36, 83%, 88%);
   width: 100vw;
   height: 100vh;
-}
-
-#board {
-  width: 100vw;
-  height: 60vh;
-  border-collapse: collapse;
-}
-
-#board tr td {
-  border: 1px solid rgb(174, 147, 147);
 }
 
 #text-bar {
@@ -54,18 +46,6 @@ body {
   margin-left: 20px;
 }
 
-#letter,
-#space {
-  border-collapse: collapse;
-}
-
-#letter tr td,
-#space tr td {
-  border: 1px solid rgb(174, 147, 147);
-  width: 20px;
-  height: 20px;
-}
-
 #display-word {
   display: flex;
 }
@@ -75,14 +55,14 @@ body {
   height: 100vh;
 
   display: grid;
-  grid-template-columns: repeat(60, 1fr);
-  grid-template-rows: repeat(40, 1fr);
+  grid-template-columns: repeat(var(--grid-col), 1fr);
+  grid-template-rows: repeat(var(--grid-row), 1fr);
 }
 
 .cell {
   border: 1px solid hsla(36, 60%, 80%, 0.5);
   background-color: hsl(36, 100%, 90%);
-  border-radius: 10px;
+  border-radius: 5px;
 }
 
 .full {
