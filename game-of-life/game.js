@@ -2,7 +2,7 @@ const runButton = document.querySelector('button');
 const input = document.querySelector('input');
 const display = document.getElementById('display-word');
 
-function createTable(x, y, fill) {
+function createTable(x, y, fillRandomly) {
   const table = document.createElement('table');
   table.id = 'board';
   for (let i = 0; i < x; i++) {
@@ -11,7 +11,7 @@ function createTable(x, y, fill) {
     for (let j = 0; j < y; j++) {
       const cell = document.createElement('td');
 
-      if (fill && Math.random() > 0.5) {
+      if (fillRandomly && Math.random() > 0.5) {
         cell.classList.add('full');
       }
 
@@ -24,23 +24,18 @@ function createTable(x, y, fill) {
 
 function renderScreen(e) {
   // Render screen
-  if (e.key == 'r') {
-    document.body.querySelector('table')?.remove();
-    const screenTable = createTable(25, 60, true);
-    document.body.prepend(screenTable);
+      if (e.key == 'r') {
+        document.body.querySelector('table')?.remove();
+        const screenTable = createTable(25, 60, true);  // randomly filled table 
+        document.body.prepend(screenTable);
+      }
+      else {
+        document.body.querySelector('table')?.remove();
+        const screenTable = createTable(25, 60, false); // empty table 
+        document.body.prepend(screenTable);
+      }
+      allowDrawing()
   }
-  // Render text
-  //   else if (e.key == 'a') {
-  //     renderLetter('e');
-  //   }
-
-  // Clear screen
-  else {
-    document.body.querySelector('table')?.remove();
-    const screenTable = createTable(25, 60, false);
-    document.body.prepend(screenTable);
-  }
-}
 
 async function renderWord() {
   if (!input.value) {

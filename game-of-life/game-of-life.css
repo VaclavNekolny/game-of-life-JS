@@ -30,7 +30,7 @@ body {
   left: calc(50% - 280px); /* tohle je prasárna :D */
   top: 15vh;
 
-  padding: 40px 60px 40px 80px;
+  padding: 40px 40px 40px 60px;
   background-color: hsla(240, 100%, 50%, 0.85);
   border-radius: 100px;
 }
