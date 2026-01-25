@@ -2,6 +2,9 @@ const runButton = document.querySelector('button');
 const input = document.querySelector('input');
 const display = document.getElementById('display-word');
 
+const GRID_W = 60;
+const GRID_H = 40;
+
 function createTable(x, y, fillRandomly) {
   const table = document.createElement('table');
   table.id = 'board';
