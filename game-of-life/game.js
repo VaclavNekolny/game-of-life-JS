@@ -7,7 +7,7 @@ const grid = document.querySelector('.grid');
 
 const GRID_W = 60;
 const GRID_H = 40;
-let pointer = [0, 0];
+let pointer = [0, 20];
 drawEmptyGrid(GRID_W, GRID_H);
 allowDrawing();
 
@@ -43,7 +43,7 @@ function drawEmptyGrid(x, y) {
 }
 
 function getCell(x, y) {
-  if (x > GRID_H - 1 || y > GRID_W - 1) {
+  if (x > GRID_W - 1 || y > GRID_H - 1) {
     throw new Error('out of range');
   }
   return grid.children[y * GRID_W + x];
@@ -59,7 +59,11 @@ function handleKeypress(e) {
   } else if (e.code == 'Space') {
     textBar.toggleAttribute('hidden');
   } else if (e.key == 'x') {
-    renderBitmapLetter('f', GRID_W, GRID_H);
+    renderBitmapLetter('S');
+    renderBitmapLetter('T');
+    renderBitmapLetter('A');
+    renderBitmapLetter('R');
+    renderBitmapLetter('T');
   } else {
     document.body.querySelector('table')?.remove();
     const screenTable = createTable(25, 60, false); // empty table
@@ -117,36 +121,28 @@ async function fetchAlphabethBitmap() {
   }
 }
 
-async function renderBitmapLetter(letter, x, y) {
+async function renderBitmapLetter(letter) {
   // TODO: refactor -> distinguish fetch from the function
   const font = await fetchAlphabethBitmap();
   const letterBmp = await font[letter];
 
   console.log('renderBitmapLetter');
   console.log(letterBmp);
-  let curPointer = [pointer];
-  console.log(curPointer);
+  let [x, y] = pointer;
 
   for (let i = 0; i < letterBmp.length; i++) {
     // convert to binary
     const pixelRow = letterBmp[i].toString(2).padStart(5, '0');
-    const rowArray = pixelRow.split('');
+    const rowArray = pixelRow.split('').reverse(); // why I need reverse? 
     for (let j = 0; j < rowArray.length; j++) {
-      if (rowArray[j] == '1'){
-        getCell(i,j).classList.add("full")
+      if (rowArray[j] == '1') {
+        getCell(j + x, i + y).classList.add('full');
       }
     }
   }
- 
-  //   rowArray.forEach((pix) => {
-  //     const td = document.createElement('td');
-  //     if (pix == '1') {
-  //       td.classList.add('full');
-  //     }
-  //     tr.prepend(td);
-  //   });
-  //   table.appendChild(tr);
-  // });
+
+  // setting new pointer
+  pointer[0] = pointer[0] + 6
 }
 
 function renderSpace() {
