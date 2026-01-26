@@ -56,8 +56,11 @@ function handleKeypress(e) {
     textBar.classList.add('show');
   }
   if (e.key === 'Escape') {
-    textBar.classList.remove('show');
-    deselectCell()
+    if (textBar.classList.contains('show')) {
+      textBar.classList.remove('show');
+    } else {
+      deselectCell();
+    }
   }
   allowDrawing();
 }
@@ -87,7 +90,8 @@ async function renderWordFromInput() {
   for (letter of wordArray) {
     renderBitmapLetter(letter);
   }
-  selectCell(pointer)
+  deselectCell();
+  selectCell(pointer);
 }
 
 async function fetchAlphabethBitmap() {
@@ -158,18 +162,36 @@ function switchMode() {
   }
 }
 
-function selectCell([x,y]) {
-  const cell = document.querySelector(`div[x="${y}"][y="${x}"]`);
-  cell.classList.add('selected')
+function handleRightClick(e) {
+  e.preventDefault();
+  const x = +e.target.getAttribute('x');
+  const y = +e.target.getAttribute('y');
+
+  console.log(x, y);
+
+  if (e.target.classList.contains('cell')) {
+    if (!selectedCell) {
+      selectCell([x, y]);
+    } else if (selectedCell == e.target) {
+      deselectCell();
+    } else {
+      deselectCell();
+      selectCell([x, y]);
+    }
+  }
+}
+
+function selectCell([x, y]) {
+  const cell = document.querySelector(`div[x="${x}"][y="${y}"]`);
+  cell.classList.add('selected');
   selectedCell = cell;
 }
 
 function deselectCell() {
   if (selectedCell) {
-    selectedCell.classList.remove("selected")
+    selectedCell.classList.remove('selected');
     selectedCell = null;
   }
-  
 }
 
 document.addEventListener('keydown', handleKeypress);
@@ -178,6 +200,7 @@ document.querySelectorAll('.slider').forEach((slider) => {
   slider.addEventListener('input', getColor);
 });
 document.getElementById('mode').addEventListener('click', switchMode);
+grid.addEventListener('contextmenu', handleRightClick);
 
 allowDrawing();
 
