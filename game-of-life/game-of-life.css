@@ -110,7 +110,7 @@ input[type='range']::-webkit-slider-thumb {
   background: hsl(221, 100%, 100%);
 }
 
-#mode {
+.btn {
   padding: 10px 20px;
   background-color: hsl(221, 66%, 76%);
   text-align: center;
@@ -120,7 +120,7 @@ input[type='range']::-webkit-slider-thumb {
   user-select: none;
 }
 
-#mode:hover {
+.btn:hover {
   background-color: hsl(221, 36%, 56%);
   color: hsl(221, 100%, 100%);
   cursor: pointer;

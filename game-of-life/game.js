@@ -31,6 +31,12 @@ function drawEmptyGrid(x, y) {
   }
 }
 
+function clearGrid() {
+  document.querySelectorAll('.cell').forEach(cell=> cell.classList.remove('full'))
+}
+
+
+
 function getCell(x, y) {
   if (x > GRID_COL - 1 || y > GRID_ROW - 1) {
     throw new Error('out of range');
@@ -200,6 +206,7 @@ document.querySelectorAll('.slider').forEach((slider) => {
   slider.addEventListener('input', getColor);
 });
 document.getElementById('mode').addEventListener('click', switchMode);
+document.getElementById('clear').addEventListener('click', clearGrid);
 grid.addEventListener('contextmenu', handleRightClick);
 
 allowDrawing();
