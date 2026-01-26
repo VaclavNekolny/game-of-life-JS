@@ -4,11 +4,12 @@ const textBar = document.getElementById('text-bar');
 
 const grid = document.querySelector('.grid');
 
-let color = 'hsl(180, 50%, 50%)';
+let color = [180, 50, 50];
 const hue = document.getElementById('hue');
 const saturation = document.getElementById('saturation');
 const lightness = document.getElementById('lightness');
 let isDarkMode = false;
+let isMagicOn = false;
 
 const GRID_COL = 40;
 const GRID_ROW = 20;
@@ -32,10 +33,31 @@ function drawEmptyGrid(x, y) {
 }
 
 function clearGrid() {
-  document.querySelectorAll('.cell').forEach(cell=> cell.classList.remove('full'))
+  document
+    .querySelectorAll('.cell')
+    .forEach((cell) => cell.classList.remove('full'));
 }
 
-
+function magic() {
+  console.log('magic');
+  if (!isMagicOn) {
+    document.querySelectorAll('.full').forEach((cell) => {
+      let [h, s, l] = color;
+      h = h - 4 + Math.round(Math.random() * 8);
+      s = s - 15 + Math.round(Math.random() * 30);
+      l = l - 15 + Math.round(Math.random() * 30);
+      console.log(h, s, l);
+  
+      cell.style.backgroundColor = `hsl(${h},${s}%,${l}%)`;
+    });
+    isMagicOn = true;
+  } else {
+    document.querySelectorAll('.full').forEach((cell) => {
+      cell.removeAttribute('style')
+    });
+    isMagicOn = false;
+  }
+}
 
 function getCell(x, y) {
   if (x > GRID_COL - 1 || y > GRID_ROW - 1) {
@@ -48,12 +70,16 @@ function getColor() {
   const currentColor = `hsl(${hue.value},${saturation.value}%,${lightness.value}%)`;
 
   document.getElementById('color-picker').style.borderColor = currentColor;
-  color = currentColor;
+  color = [+hue.value, +saturation.value, +lightness.value];
   document.documentElement.style.setProperty('--color', currentColor);
   document.documentElement.style.setProperty(
     '--color-dark',
     `hsla(${hue.value}, 80%, 20%)`,
   );
+}
+
+function getRandomColor() {
+  
 }
 
 function handleKeypress(e) {
@@ -207,6 +233,7 @@ document.querySelectorAll('.slider').forEach((slider) => {
 });
 document.getElementById('mode').addEventListener('click', switchMode);
 document.getElementById('clear').addEventListener('click', clearGrid);
+document.getElementById('magic').addEventListener('click', magic);
 grid.addEventListener('contextmenu', handleRightClick);
 
 allowDrawing();
