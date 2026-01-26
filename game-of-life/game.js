@@ -16,6 +16,7 @@ document.documentElement.style.setProperty('--grid-col', GRID_COL);
 document.documentElement.style.setProperty('--grid-row', GRID_ROW);
 
 let pointer = [4, 5];
+let selectedCell;
 drawEmptyGrid(GRID_COL, GRID_ROW);
 
 function drawEmptyGrid(x, y) {
@@ -56,6 +57,7 @@ function handleKeypress(e) {
   }
   if (e.key === 'Escape') {
     textBar.classList.remove('show');
+    deselectCell()
   }
   allowDrawing();
 }
@@ -85,6 +87,7 @@ async function renderWordFromInput() {
   for (letter of wordArray) {
     renderBitmapLetter(letter);
   }
+  selectCell(pointer)
 }
 
 async function fetchAlphabethBitmap() {
@@ -153,6 +156,20 @@ function switchMode() {
     );
     isDarkMode = true;
   }
+}
+
+function selectCell([x,y]) {
+  const cell = document.querySelector(`div[x="${y}"][y="${x}"]`);
+  cell.classList.add('selected')
+  selectedCell = cell;
+}
+
+function deselectCell() {
+  if (selectedCell) {
+    selectedCell.classList.remove("selected")
+    selectedCell = null;
+  }
+  
 }
 
 document.addEventListener('keydown', handleKeypress);
