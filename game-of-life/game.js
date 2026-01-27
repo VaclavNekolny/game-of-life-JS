@@ -1,4 +1,4 @@
-const runButton = document.querySelector('button');
+const runButton = document.getElementById('run');
 const input = document.querySelector('input');
 const textBar = document.getElementById('text-bar');
 
@@ -33,27 +33,23 @@ function drawEmptyGrid(x, y) {
 }
 
 function clearGrid() {
-  document
-    .querySelectorAll('.cell')
-    .forEach((cell) => cell.classList.remove('full'));
+  document.querySelectorAll('.cell').forEach((cell) => {
+    cell.classList.remove('full');
+    if (isMagicOn) {
+      cell.removeAttribute('style');
+    }
+  });
 }
 
-function magic() {
-  console.log('magic');
+function magic(slide = false) {
   if (!isMagicOn) {
     document.querySelectorAll('.full').forEach((cell) => {
-      let [h, s, l] = color;
-      h = h - 4 + Math.round(Math.random() * 8);
-      s = s - 15 + Math.round(Math.random() * 30);
-      l = l - 15 + Math.round(Math.random() * 30);
-      console.log(h, s, l);
-  
-      cell.style.backgroundColor = `hsl(${h},${s}%,${l}%)`;
+      cell.style.backgroundColor = getRandomColor();
     });
     isMagicOn = true;
   } else {
     document.querySelectorAll('.full').forEach((cell) => {
-      cell.removeAttribute('style')
+      cell.removeAttribute('style');
     });
     isMagicOn = false;
   }
@@ -79,17 +75,27 @@ function getColor() {
 }
 
 function getRandomColor() {
-  
+  let [h, s, l] = color;
+  h = h - 4 + Math.round(Math.random() * 8);
+  s = s - 15 + Math.round(Math.random() * 30);
+  l = l - 15 + Math.round(Math.random() * 30);
+  console.log(h, s, l);
+  return `hsl(${h},${s}%,${l}%)`;
 }
 
 function handleKeypress(e) {
   // Render screen
   if (e.code == 'Space') {
     textBar.classList.add('show');
+    // Needs delay becaus input was hidden
+    setTimeout(() => {
+      input.focus();
+    }, 100);
   }
   if (e.key === 'Escape') {
     if (textBar.classList.contains('show')) {
       textBar.classList.remove('show');
+      clearInput()
     } else {
       deselectCell();
     }
@@ -101,6 +107,13 @@ function allowDrawing() {
   grid.addEventListener('click', (e) => {
     if (e.target.classList.contains('cell')) {
       e.target.classList.toggle('full');
+      if (isMagicOn) {
+        if (e.target.classList.contains('full')) {
+          e.target.style.backgroundColor = getRandomColor();
+        } else {
+          e.target.removeAttribute('style');
+        }
+      }
     }
     pointer = [e.target.getAttribute('y'), e.target.getAttribute('x')];
   });
@@ -108,11 +121,19 @@ function allowDrawing() {
   grid.addEventListener('pointerover', (e) => {
     if (e.target.classList.contains('cell') && e.buttons > 0) {
       e.target.classList.toggle('full');
+      if (isMagicOn) {
+        if (e.target.classList.contains('full')) {
+          e.target.style.backgroundColor = getRandomColor();
+        } else {
+          e.target.removeAttribute('style');
+        }
+      }
     }
   });
 }
 
-async function renderWordFromInput() {
+async function renderWordFromInput(e) {
+  e.preventDefault();
   if (!input.value) {
     console.error('Input text, please!');
     return;
@@ -123,7 +144,7 @@ async function renderWordFromInput() {
     renderBitmapLetter(letter);
   }
   deselectCell();
-  selectCell(pointer);
+  // selectCell(pointer);
 }
 
 async function fetchAlphabethBitmap() {
@@ -192,6 +213,12 @@ function switchMode() {
     );
     isDarkMode = true;
   }
+}
+
+function clearInput() {
+        setTimeout(() => {
+      input.value = ''
+    }, 300);
 }
 
 function handleRightClick(e) {
