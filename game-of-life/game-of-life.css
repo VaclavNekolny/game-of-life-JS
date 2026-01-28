@@ -12,6 +12,7 @@
   --body-background: hsl(36, 83%, 88%);
   --cell-background: hsl(36, 100%, 90%);
   --cell-border-color: hsla(36, 60%, 80%, 0.5);
+  --cell-border-radius: 5px;
 }
 
 body {
@@ -75,7 +76,7 @@ body {
 .cell {
   border: 1px solid var(--cell-border-color);
   background-color: var(--cell-background);
-  border-radius: 5px;
+  border-radius: var(--cell-border-radius);
 }
 
 .full {

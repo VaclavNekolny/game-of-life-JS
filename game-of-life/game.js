@@ -9,13 +9,15 @@ let color = [180, 50, 50];
 const hue = document.getElementById('hue');
 const saturation = document.getElementById('saturation');
 const lightness = document.getElementById('lightness');
+const cellRadiusSlider = document.getElementById('cell-radius')
+
 const arrow = document.getElementById('arrow');
 
 let isDarkMode = false;
 let isMagicOn = false;
 
 const GRID_COL = 40;
-const GRID_ROW = 20;
+const GRID_ROW = 25;
 document.documentElement.style.setProperty('--grid-col', GRID_COL);
 document.documentElement.style.setProperty('--grid-row', GRID_ROW);
 
@@ -281,6 +283,16 @@ function deselectCell() {
   }
 }
 
+function setCellRadius(e) {
+  document.documentElement.style.setProperty('--cell-border-radius', `${e.target.value}px`);
+}
+
+function serMaximumCellRadius(n) {
+  const cell = document.querySelector('.cell')
+  const maxRadius = cell.offsetHeight / 2;
+  cellRadiusSlider.setAttribute('max', maxRadius)
+} 
+
 document.addEventListener('keydown', handleKeypress);
 runButton.addEventListener('click', renderWordFromInput);
 document.querySelectorAll('.slider').forEach((slider) => {
@@ -291,7 +303,11 @@ document.getElementById('clear').addEventListener('click', clearGrid);
 document.getElementById('magic').addEventListener('click', magic);
 arrow.addEventListener('click', growSetup);
 grid.addEventListener('contextmenu', handleRightClick);
+cellRadiusSlider.addEventListener('input', setCellRadius)
 
-allowDrawing();
-setArrowDown();
-
+document.addEventListener('DOMContentLoaded', () => {
+  allowDrawing();
+  setArrowDown();
+  
+  serMaximumCellRadius(1)
+})
