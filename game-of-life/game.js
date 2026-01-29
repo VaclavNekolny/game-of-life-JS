@@ -14,6 +14,7 @@ const cellRadiusSlider = document.getElementById('cell-radius')
 const arrow = document.getElementById('arrow');
 
 const addRowButton = document.getElementById('add-row')
+const deleteRowButton = document.getElementById('delete-row')
 
 
 let isDarkMode = false;
@@ -32,10 +33,7 @@ function drawEmptyGrid() {
   const grid = document.querySelector('.grid');
 
   for (let i = 0; i < grid_col * grid_row; i++) {
-    const cell = document.createElement('div');
-    cell.className = 'cell';
-    cell.setAttribute('row', (i / grid_col).toFixed());
-    cell.setAttribute('col', i % grid_col);
+    cell = createNewCell((i / grid_col).toFixed(), (i % grid_col))
     grid.appendChild(cell);
   }
 }
@@ -301,16 +299,23 @@ function createNewCell(row,col) {
     cell.className = 'cell';
     cell.setAttribute('row', row);
     cell.setAttribute('col', col);
+    return cell
 }
 
 function addRow(){
-  for(let i = 1; i <= grid_col; i++){
+  grid_row += 1;
+  for(let i = 0; i < grid_col; i++){
+    const cell = createNewCell(row=grid_row, col=i)
+    grid.appendChild(cell)
     
   }
-  grid_row += 1;
+  document.documentElement.style.setProperty('--grid-row', grid_row);
 }
 
-function removeRow() {
+function deleteRow() {
+  grid.querySelectorAll(`div[row="${grid_row}"]`).forEach((cell)=> cell.remove())
+  grid_row -= 1;
+  document.documentElement.style.setProperty('--grid-row', grid_row);
 }
 
 document.addEventListener('keydown', handleKeypress);
@@ -333,3 +338,4 @@ document.addEventListener('DOMContentLoaded', () => {
 })
 
 addRowButton.addEventListener('click', addRow)
+deleteRowButton.addEventListener('click', deleteRow)
