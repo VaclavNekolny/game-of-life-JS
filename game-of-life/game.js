@@ -13,26 +13,29 @@ const cellRadiusSlider = document.getElementById('cell-radius')
 
 const arrow = document.getElementById('arrow');
 
+const addRowButton = document.getElementById('add-row')
+
+
 let isDarkMode = false;
 let isMagicOn = false;
 
-const GRID_COL = 40;
-const GRID_ROW = 25;
-document.documentElement.style.setProperty('--grid-col', GRID_COL);
-document.documentElement.style.setProperty('--grid-row', GRID_ROW);
+let grid_col = 40;
+let grid_row = 25;
+document.documentElement.style.setProperty('--grid-col', grid_col);
+document.documentElement.style.setProperty('--grid-row', grid_row);
 
 let pointer = [4, 5];
 let selectedCell;
-drawEmptyGrid(GRID_COL, GRID_ROW);
+drawEmptyGrid();
 
-function drawEmptyGrid(x, y) {
+function drawEmptyGrid() {
   const grid = document.querySelector('.grid');
 
-  for (let i = 0; i < GRID_COL * GRID_ROW; i++) {
+  for (let i = 0; i < grid_col * grid_row; i++) {
     const cell = document.createElement('div');
     cell.className = 'cell';
-    cell.setAttribute('x', (i / GRID_COL).toFixed());
-    cell.setAttribute('y', i % GRID_COL);
+    cell.setAttribute('row', (i / grid_col).toFixed());
+    cell.setAttribute('col', i % grid_col);
     grid.appendChild(cell);
   }
 }
@@ -60,11 +63,11 @@ function magic(slide = false) {
   }
 }
 
-function getCell(x, y) {
-  if (x > GRID_COL - 1 || y > GRID_ROW - 1) {
+function getCell(row, col) {
+  if (row > grid_col - 1 || col > grid_row - 1) {
     throw new Error('out of range');
   }
-  return grid.children[y * GRID_COL + x];
+  return grid.children[col * grid_col + row];
 }
 
 function getColor() {
@@ -123,7 +126,7 @@ function allowDrawing() {
         }
       }
     }
-    pointer = [e.target.getAttribute('y'), e.target.getAttribute('x')];
+    pointer = [e.target.getAttribute('col'), e.target.getAttribute('row')];
   });
 
   grid.addEventListener('pointerover', (e) => {
@@ -174,7 +177,7 @@ async function renderBitmapLetter(letter) {
 
   console.log('renderBitmapLetter');
   console.log(letterBmp);
-  let [x, y] = pointer;
+  let [row, col] = pointer;
 
   for (let i = 0; i < letterBmp.length; i++) {
     // convert to binary
@@ -182,7 +185,7 @@ async function renderBitmapLetter(letter) {
     const rowArray = pixelRow.split('').reverse(); // why I need reverse?
     for (let j = 0; j < rowArray.length; j++) {
       if (rowArray[j] == '1') {
-        getCell(+j + +x, +i + +y).classList.add('full');
+        getCell(+j + +row, +i + +col).classList.add('full');
       }
     }
   }
@@ -231,25 +234,25 @@ function clearInput() {
 
 function handleRightClick(e) {
   e.preventDefault();
-  const x = +e.target.getAttribute('x');
-  const y = +e.target.getAttribute('y');
+  const row = +e.target.getAttribute('row');
+  const col = +e.target.getAttribute('col');
 
-  console.log(x, y);
+  console.log(row, col);
 
   if (e.target.classList.contains('cell')) {
     if (!selectedCell) {
-      selectCell([x, y]);
+      selectCell([row, col]);
     } else if (selectedCell == e.target) {
       deselectCell();
     } else {
       deselectCell();
-      selectCell([x, y]);
+      selectCell([row, col]);
     }
   }
 }
 
-function selectCell([x, y]) {
-  const cell = document.querySelector(`div[x="${x}"][y="${y}"]`);
+function selectCell([row, col]) {
+  const cell = document.querySelector(`div[row="${row}"][col="${col}"]`);
   cell.classList.add('selected');
   selectedCell = cell;
 }
@@ -287,11 +290,28 @@ function setCellRadius(e) {
   document.documentElement.style.setProperty('--cell-border-radius', `${e.target.value}px`);
 }
 
-function serMaximumCellRadius(n) {
+function setMaximumCellRadius() {
   const cell = document.querySelector('.cell')
   const maxRadius = cell.offsetHeight / 2;
   cellRadiusSlider.setAttribute('max', maxRadius)
-} 
+}
+
+function createNewCell(row,col) {
+    const cell = document.createElement('div');
+    cell.className = 'cell';
+    cell.setAttribute('row', row);
+    cell.setAttribute('col', col);
+}
+
+function addRow(){
+  for(let i = 1; i <= grid_col; i++){
+    
+  }
+  grid_row += 1;
+}
+
+function removeRow() {
+}
 
 document.addEventListener('keydown', handleKeypress);
 runButton.addEventListener('click', renderWordFromInput);
@@ -309,5 +329,7 @@ document.addEventListener('DOMContentLoaded', () => {
   allowDrawing();
   setArrowDown();
   
-  serMaximumCellRadius(1)
+  setMaximumCellRadius(1)
 })
+
+addRowButton.addEventListener('click', addRow)
