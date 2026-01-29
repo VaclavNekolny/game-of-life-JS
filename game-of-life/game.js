@@ -9,13 +9,14 @@ let color = [180, 50, 50];
 const hue = document.getElementById('hue');
 const saturation = document.getElementById('saturation');
 const lightness = document.getElementById('lightness');
-const cellRadiusSlider = document.getElementById('cell-radius')
+const cellRadiusSlider = document.getElementById('cell-radius');
 
 const arrow = document.getElementById('arrow');
 
-const addRowButton = document.getElementById('add-row')
-const deleteRowButton = document.getElementById('delete-row')
-
+const addRowButton = document.getElementById('add-row');
+const deleteRowButton = document.getElementById('delete-row');
+const addColButton = document.getElementById('add-col');
+const deleteColButton = document.getElementById('delete-col');
 
 let isDarkMode = false;
 let isMagicOn = false;
@@ -33,7 +34,10 @@ function drawEmptyGrid() {
   const grid = document.querySelector('.grid');
 
   for (let i = 0; i < grid_col * grid_row; i++) {
-    cell = createNewCell((i / grid_col).toFixed(), (i % grid_col))
+    cell = createNewCell(
+      (row = Math.floor(i / grid_col)),
+      (col = i % grid_col),
+    );
     grid.appendChild(cell);
   }
 }
@@ -285,37 +289,52 @@ function deselectCell() {
 }
 
 function setCellRadius(e) {
-  document.documentElement.style.setProperty('--cell-border-radius', `${e.target.value}px`);
+  document.documentElement.style.setProperty(
+    '--cell-border-radius',
+    `${e.target.value}px`,
+  );
 }
 
 function setMaximumCellRadius() {
-  const cell = document.querySelector('.cell')
+  const cell = document.querySelector('.cell');
   const maxRadius = cell.offsetHeight / 2;
-  cellRadiusSlider.setAttribute('max', maxRadius)
+  cellRadiusSlider.setAttribute('max', maxRadius);
 }
 
-function createNewCell(row,col) {
-    const cell = document.createElement('div');
-    cell.className = 'cell';
-    cell.setAttribute('row', row);
-    cell.setAttribute('col', col);
-    return cell
+function createNewCell(row, col) {
+  const cell = document.createElement('div');
+  cell.className = 'cell';
+  cell.setAttribute('row', row);
+  cell.setAttribute('col', col);
+  return cell;
 }
 
-function addRow(){
-  grid_row += 1;
-  for(let i = 0; i < grid_col; i++){
-    const cell = createNewCell(row=grid_row, col=i)
-    grid.appendChild(cell)
-    
+function addRow() {
+  for (let i = 0; i < grid_col; i++) {
+    const cell = createNewCell((row = grid_row), (col = i));
+    grid.appendChild(cell);
   }
+  grid_row += 1;
   document.documentElement.style.setProperty('--grid-row', grid_row);
 }
 
 function deleteRow() {
-  grid.querySelectorAll(`div[row="${grid_row}"]`).forEach((cell)=> cell.remove())
+  grid
+    .querySelectorAll(`div[row="${grid_row}"]`)
+    .forEach((cell) => cell.remove());
   grid_row -= 1;
   document.documentElement.style.setProperty('--grid-row', grid_row);
+}
+
+function addCol() {
+  console.log('addCol');
+  grid
+    .querySelectorAll(`div[col="${grid_col}"]`)
+    .forEach((cell) => (cell.style.backgroundColor = 'black'));
+  grid_col += 1;
+}
+function deleteCol() {
+  console.log('deleteCol');
 }
 
 document.addEventListener('keydown', handleKeypress);
@@ -328,14 +347,16 @@ document.getElementById('clear').addEventListener('click', clearGrid);
 document.getElementById('magic').addEventListener('click', magic);
 arrow.addEventListener('click', growSetup);
 grid.addEventListener('contextmenu', handleRightClick);
-cellRadiusSlider.addEventListener('input', setCellRadius)
+cellRadiusSlider.addEventListener('input', setCellRadius);
 
 document.addEventListener('DOMContentLoaded', () => {
   allowDrawing();
   setArrowDown();
-  
-  setMaximumCellRadius(1)
-})
 
-addRowButton.addEventListener('click', addRow)
-deleteRowButton.addEventListener('click', deleteRow)
+  setMaximumCellRadius(1);
+});
+
+addRowButton.addEventListener('click', addRow);
+deleteRowButton.addEventListener('click', deleteRow);
+addColButton.addEventListener('click', addCol);
+deleteColButton.addEventListener('click', deleteCol);
