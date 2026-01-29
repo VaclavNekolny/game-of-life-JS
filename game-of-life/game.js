@@ -320,7 +320,7 @@ function addRow() {
 
 function deleteRow() {
   grid
-    .querySelectorAll(`div[row="${grid_row}"]`)
+    .querySelectorAll(`div[row="${grid_row-1}"]`)
     .forEach((cell) => cell.remove());
   grid_row -= 1;
   document.documentElement.style.setProperty('--grid-row', grid_row);
