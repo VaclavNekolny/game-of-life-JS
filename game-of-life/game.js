@@ -24,10 +24,10 @@ const deleteColButton = document.getElementById('delete-col');
 let isDarkMode = false;
 let isMagicOn = false;
 
-const runButton = document.getElementById('run-game')
-const stopButton = document.getElementById('stop-game')
+const runButton = document.getElementById('run-game');
+const stopButton = document.getElementById('stop-game');
 let runSpeed = 1000;
-const speedSlider = document.getElementById('game-speed')
+const speedSlider = document.getElementById('game-speed');
 
 let grid_col = 40;
 let grid_row = 25;
@@ -398,7 +398,9 @@ function nextRound() {
   for (let row = 0; row < grid_row; row++) {
     let newRow = [];
     for (let col = 0; col < grid_col; col++) {
-      let lives = gridObject[(row, col)];
+      let lives = gridObject[row][col];
+      // let lives = gridObject[(row,col)]; // HOW IS THET EVEN POSSIBLE??????????
+
       const neighboursCount = countNeighbours(row, col);
 
       if (lives) {
@@ -450,9 +452,8 @@ function drawGridFromObject() {
     if (gridObject[row][col]) {
       cell.classList.add('full');
       if (isMagicOn) {
-        cell.style.backgroundColor = getRandomColor()
+        cell.style.backgroundColor = getRandomColor();
       }
-
     } else {
       cell.classList.remove('full');
       cell.removeAttribute('style');
@@ -461,29 +462,28 @@ function drawGridFromObject() {
 }
 
 function runGame() {
-  disableGridAdjusting()
+  disableGridAdjusting();
 
-  clearInterval(intervalId)
-  loadGridToObject()
+  clearInterval(intervalId);
+  loadGridToObject();
   intervalId = setInterval(nextRound, runSpeed);
 }
 
 function stopGame() {
-  enableGridAdjusting()
-  
-  clearInterval(intervalId)
-  intervalId = null
+  enableGridAdjusting();
+
+  clearInterval(intervalId);
+  intervalId = null;
 }
 
 function setGameSpeed(e) {
   const speeds = [2000, 1000, 800, 600, 400, 300, 200, 100, 50, 25];
-  runSpeed = speeds[+e.target.value]
+  runSpeed = speeds[+e.target.value];
   console.log(runSpeed);
   if (intervalId) {
-    stopGame()
-    runGame()
+    stopGame();
+    runGame();
   }
-
 }
 
 document.addEventListener('keydown', handleKeypress);
@@ -510,6 +510,6 @@ deleteRowButton.addEventListener('click', deleteRow);
 addColButton.addEventListener('click', addCol);
 deleteColButton.addEventListener('click', deleteCol);
 
-runButton.addEventListener('click', runGame)
-stopButton.addEventListener('click', stopGame)
-speedSlider.addEventListener('input', setGameSpeed)
+runButton.addEventListener('click', runGame);
+stopButton.addEventListener('click', stopGame);
+speedSlider.addEventListener('input', setGameSpeed);
