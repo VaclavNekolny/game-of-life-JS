@@ -1,8 +1,11 @@
-const runButton = document.getElementById('run');
+const runTextButton = document.getElementById('run');
 const input = document.querySelector('input');
 const textBar = document.getElementById('text-bar');
 
 const grid = document.querySelector('.grid');
+let gridObject = [];
+
+let intervalId;
 
 const colorPicker = document.getElementById('color-picker');
 let color = [180, 50, 50];
@@ -20,6 +23,11 @@ const deleteColButton = document.getElementById('delete-col');
 
 let isDarkMode = false;
 let isMagicOn = false;
+
+const runButton = document.getElementById('run-game')
+const stopButton = document.getElementById('stop-game')
+let runSpeed = 1000;
+const speedSlider = document.getElementById('game-speed')
 
 let grid_col = 40;
 let grid_row = 25;
@@ -309,7 +317,10 @@ function createNewCell(row, col) {
   return cell;
 }
 
-function addRow() {
+function addRow(e) {
+  if (e.target.classList.contains('disabled')) {
+    return;
+  }
   for (let i = 0; i < grid_col; i++) {
     const cell = createNewCell((row = grid_row), (col = i));
     grid.appendChild(cell);
@@ -318,7 +329,10 @@ function addRow() {
   document.documentElement.style.setProperty('--grid-row', grid_row);
 }
 
-function deleteRow() {
+function deleteRow(e) {
+  if (e.target.classList.contains('disabled')) {
+    return;
+  }
   grid
     .querySelectorAll(`div[row="${grid_row - 1}"]`)
     .forEach((cell) => cell.remove());
@@ -326,7 +340,10 @@ function deleteRow() {
   document.documentElement.style.setProperty('--grid-row', grid_row);
 }
 
-function addCol() {
+function addCol(e) {
+  if (e.target.classList.contains('disabled')) {
+    return;
+  }
   grid.querySelectorAll(`div[col="${grid_col - 1}"]`).forEach((cell, row) => {
     const newCell = createNewCell(row, grid_col);
     cell.after(newCell);
@@ -334,14 +351,143 @@ function addCol() {
   grid_col += 1;
   document.documentElement.style.setProperty('--grid-col', grid_col);
 }
-function deleteCol() {
-  grid.querySelectorAll(`div[col="${grid_col-1}"]`).forEach((cell) => cell.remove())
+function deleteCol(e) {
+  if (e.target.classList.contains('disabled')) {
+    return;
+  }
+  grid
+    .querySelectorAll(`div[col="${grid_col - 1}"]`)
+    .forEach((cell) => cell.remove());
   grid_col -= 1;
   document.documentElement.style.setProperty('--grid-col', grid_col);
 }
 
+function disableGridAdjusting() {
+  addRowButton.classList.add('disabled');
+  deleteRowButton.classList.add('disabled');
+  addColButton.classList.add('disabled');
+  deleteColButton.classList.add('disabled');
+}
+
+function enableGridAdjusting() {
+  addRowButton.classList.remove('disabled');
+  deleteRowButton.classList.remove('disabled');
+  addColButton.classList.remove('disabled');
+  deleteColButton.classList.remove('disabled');
+}
+
+function loadGridToObject() {
+  gridObject = [];
+  for (let i = 0; i < grid_row; i++) {
+    let row = [];
+    for (let j = 0; j < grid_col; j++) {
+      const cell = document.querySelector(`div[row="${i}"][col="${j}"]`);
+      if (cell.classList.contains('full')) {
+        row.push(1);
+      } else {
+        row.push(0);
+      }
+    }
+    gridObject.push(row);
+  }
+  console.log(gridObject);
+}
+
+function nextRound() {
+  let newGridObject = [];
+  for (let row = 0; row < grid_row; row++) {
+    let newRow = [];
+    for (let col = 0; col < grid_col; col++) {
+      let lives = gridObject[(row, col)];
+      const neighboursCount = countNeighbours(row, col);
+
+      if (lives) {
+        if (neighboursCount < 2) {
+          newRow.push(0);
+        } else if (neighboursCount > 3) {
+          newRow.push(0);
+        } else {
+          newRow.push(1);
+        }
+      } else {
+        if (neighboursCount == 3) {
+          newRow.push(1);
+        } else {
+          newRow.push(0);
+        }
+      }
+    }
+    newGridObject.push(newRow);
+  }
+  gridObject = newGridObject;
+  drawGridFromObject();
+}
+
+function countNeighbours(row, col) {
+  let counter = 0;
+  for (let i = row - 1; i <= row + 1; i++) {
+    for (let j = col - 1; j <= col + 1; j++) {
+      if (
+        i < 0 ||
+        j < 0 ||
+        i > grid_row - 1 ||
+        j > grid_col - 1 ||
+        (i == row && j == col)
+      ) {
+        counter += 0;
+      } else {
+        counter += +gridObject[i][j];
+      }
+    }
+  }
+  return counter;
+}
+
+function drawGridFromObject() {
+  for (const cell of grid.children) {
+    const row = +cell.getAttribute('row');
+    const col = +cell.getAttribute('col');
+    if (gridObject[row][col]) {
+      cell.classList.add('full');
+      if (isMagicOn) {
+        cell.style.backgroundColor = getRandomColor()
+      }
+
+    } else {
+      cell.classList.remove('full');
+      cell.removeAttribute('style');
+    }
+  }
+}
+
+function runGame() {
+  disableGridAdjusting()
+
+  clearInterval(intervalId)
+  loadGridToObject()
+  intervalId = setInterval(nextRound, runSpeed);
+}
+
+function stopGame() {
+  enableGridAdjusting()
+  
+  clearInterval(intervalId)
+  intervalId = null
+}
+
+function setGameSpeed(e) {
+  const speeds = [2000, 1000, 800, 600, 400, 300, 200, 100, 50, 25];
+  runSpeed = speeds[+e.target.value]
+  console.log(runSpeed);
+  if (intervalId) {
+    stopGame()
+    runGame()
+  }
+
+}
+
 document.addEventListener('keydown', handleKeypress);
-runButton.addEventListener('click', renderWordFromInput);
+runTextButton.addEventListener('click', renderWordFromInput);
 document.querySelectorAll('.slider').forEach((slider) => {
   slider.addEventListener('input', getColor);
 });
@@ -363,3 +509,7 @@ addRowButton.addEventListener('click', addRow);
 deleteRowButton.addEventListener('click', deleteRow);
 addColButton.addEventListener('click', addCol);
 deleteColButton.addEventListener('click', deleteCol);
+
+runButton.addEventListener('click', runGame)
+stopButton.addEventListener('click', stopGame)
+speedSlider.addEventListener('input', setGameSpeed)

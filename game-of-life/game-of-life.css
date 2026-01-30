@@ -190,6 +190,7 @@ input[type='range']::-webkit-slider-thumb {
 
 .adj:hover {
   transform: scale(1.5);
+  cursor: pointer;
 }
 
 #adjust-rows, #adjust-cols {
@@ -212,5 +213,17 @@ input[type='range']::-webkit-slider-thumb {
   right: -2px;
   flex-direction: column;
   align-items: center;
+}
+
+.disabled {
+  background-color: rgb(175, 175, 175);
+  color: rgb(154, 154, 154);
+  border: none;
+  box-shadow: none;
+  transform: none;
+}
+.disabled:hover {
+  transform: none;
+  cursor: default;
 }
 
