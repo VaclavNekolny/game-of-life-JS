@@ -320,21 +320,24 @@ function addRow() {
 
 function deleteRow() {
   grid
-    .querySelectorAll(`div[row="${grid_row-1}"]`)
+    .querySelectorAll(`div[row="${grid_row - 1}"]`)
     .forEach((cell) => cell.remove());
   grid_row -= 1;
   document.documentElement.style.setProperty('--grid-row', grid_row);
 }
 
 function addCol() {
-  console.log('addCol');
-  grid
-    .querySelectorAll(`div[col="${grid_col}"]`)
-    .forEach((cell) => (cell.style.backgroundColor = 'black'));
+  grid.querySelectorAll(`div[col="${grid_col - 1}"]`).forEach((cell, row) => {
+    const newCell = createNewCell(row, grid_col);
+    cell.after(newCell);
+  });
   grid_col += 1;
+  document.documentElement.style.setProperty('--grid-col', grid_col);
 }
 function deleteCol() {
-  console.log('deleteCol');
+  grid.querySelectorAll(`div[col="${grid_col-1}"]`).forEach((cell) => cell.remove())
+  grid_col -= 1;
+  document.documentElement.style.setProperty('--grid-col', grid_col);
 }
 
 document.addEventListener('keydown', handleKeypress);
