@@ -4,6 +4,7 @@ const textBar = document.getElementById('text-bar');
 
 const grid = document.querySelector('.grid');
 let gridObject = [];
+const glass = document.getElementById('gray-glass');
 
 let intervalId;
 
@@ -234,6 +235,7 @@ function switchMode() {
     );
     isDarkMode = true;
   }
+  glass.classList.toggle('dark-mode')
 }
 
 function clearInput() {
@@ -462,6 +464,7 @@ function drawGridFromObject() {
 }
 
 function runGame() {
+  glass.classList.remove('hidden');
   disableGridAdjusting();
 
   clearInterval(intervalId);
@@ -470,6 +473,7 @@ function runGame() {
 }
 
 function stopGame() {
+  glass.classList.add('hidden');
   enableGridAdjusting();
 
   clearInterval(intervalId);
