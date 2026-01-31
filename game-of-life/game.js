@@ -26,7 +26,7 @@ let isMagicOn = false;
 
 const runButton = document.getElementById('run-game');
 const stopButton = document.getElementById('stop-game');
-let runSpeed = 1000;
+let runSpeed = 200;
 const speedSlider = document.getElementById('game-speed');
 
 let grid_col = 40;
@@ -477,7 +477,7 @@ function stopGame() {
 }
 
 function setGameSpeed(e) {
-  const speeds = [2000, 1000, 800, 600, 400, 300, 200, 100, 50, 25];
+  const speeds = [2000, 1000, 700, 400, 300, 200, 100, 50];
   runSpeed = speeds[+e.target.value];
   console.log(runSpeed);
   if (intervalId) {
