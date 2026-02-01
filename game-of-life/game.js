@@ -505,7 +505,8 @@ cellRadiusSlider.addEventListener('input', setCellRadius);
 document.addEventListener('DOMContentLoaded', () => {
   allowDrawing();
   setArrowDown();
-
+  switchMode();
+  getColor();
   setMaximumCellRadius(1);
 });
 
