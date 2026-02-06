@@ -49,6 +49,7 @@ function drawEmptyGrid() {
     );
     grid.appendChild(cell);
   }
+  loadGridToObject();
 }
 
 function clearGrid() {
@@ -138,6 +139,7 @@ function allowDrawing() {
       }
     }
     pointer = [e.target.getAttribute('col'), e.target.getAttribute('row')];
+    loadGridToObject();
   });
 
   grid.addEventListener('pointerover', (e) => {
@@ -151,6 +153,7 @@ function allowDrawing() {
         }
       }
     }
+    loadGridToObject();
   });
 }
 
@@ -235,7 +238,7 @@ function switchMode() {
     );
     isDarkMode = true;
   }
-  glass.classList.toggle('dark-mode')
+  glass.classList.toggle('dark-mode');
 }
 
 function clearInput() {
@@ -392,7 +395,6 @@ function loadGridToObject() {
     }
     gridObject.push(row);
   }
-  console.log(gridObject);
 }
 
 function nextRound() {
@@ -423,8 +425,16 @@ function nextRound() {
     }
     newGridObject.push(newRow);
   }
+  if (areObjectsSame(gridObject, newGridObject)) {
+    stopGame();
+  }
+
   gridObject = newGridObject;
   drawGridFromObject();
+}
+
+function areObjectsSame(a, b) {
+  return JSON.stringify(a) === JSON.stringify(b);
 }
 
 function countNeighbours(row, col) {
@@ -488,6 +498,10 @@ function setGameSpeed(e) {
     stopGame();
     runGame();
   }
+}
+
+function isGridEmpty(grid) {
+  return !grid.flat().includes(1)
 }
 
 document.addEventListener('keydown', handleKeypress);
