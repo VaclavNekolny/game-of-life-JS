@@ -1,5 +1,3 @@
-import { loadFromStorage, saveToStorage } from './storage.js'
-
 const runTextButton = document.getElementById('run');
 const input = document.querySelector('input');
 const textBar = document.getElementById('text-bar');
@@ -45,10 +43,7 @@ function drawEmptyGrid() {
   const grid = document.querySelector('.grid');
 
   for (let i = 0; i < grid_col * grid_row; i++) {
-    let cell = createNewCell(
-      (Math.floor(i / grid_col)),
-      (i % grid_col),
-    );
+    let cell = createNewCell(Math.floor(i / grid_col), i % grid_col);
     grid.appendChild(cell);
   }
   loadGridToObject();
@@ -329,7 +324,7 @@ function addRow(e) {
     return;
   }
   for (let i = 0; i < grid_col; i++) {
-    const cell = createNewCell((row = grid_row), (col = i));
+    const cell = createNewCell(grid_row, i);
     grid.appendChild(cell);
   }
   grid_row += 1;
@@ -490,6 +485,7 @@ function stopGame() {
 
   clearInterval(intervalId);
   intervalId = null;
+  saveToStorage();
 }
 
 function setGameSpeed(e) {
@@ -503,7 +499,7 @@ function setGameSpeed(e) {
 }
 
 function isGridEmpty(grid) {
-  return !grid.flat().includes(1)
+  return !grid.flat().includes(1);
 }
 
 document.addEventListener('keydown', handleKeypress);
@@ -535,7 +531,26 @@ runButton.addEventListener('click', runGame);
 stopButton.addEventListener('click', stopGame);
 speedSlider.addEventListener('input', setGameSpeed);
 
-
 // STORAGE
-saveToStorage();
-console.log(loadFromStorage());
+function saveToStorage() {
+  let gameToSave = {
+    pointer: pointer,
+    isDarkMode: isDarkMode,
+    isMagicOn: isMagicOn,
+    gridSize: [grid_row, grid_col],
+    color: color,
+    gameSpeed: runSpeed,
+    grid: gridObject,
+  };
+
+  localStorage.setItem('game', JSON.stringify(gameToSave));
+  console.log('saved');
+}
+
+function loadFromStorage() {
+  const gameData = localStorage.getItem('game');
+  if (gameData) {
+    setGameSpeed(gameData.gameSpeed);
+    drawGridFromObject(gameData.grid);
+  }
+}
