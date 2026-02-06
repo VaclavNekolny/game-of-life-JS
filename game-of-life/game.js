@@ -1,3 +1,5 @@
+import { loadFromStorage, saveToStorage } from './storage.js'
+
 const runTextButton = document.getElementById('run');
 const input = document.querySelector('input');
 const textBar = document.getElementById('text-bar');
@@ -43,9 +45,9 @@ function drawEmptyGrid() {
   const grid = document.querySelector('.grid');
 
   for (let i = 0; i < grid_col * grid_row; i++) {
-    cell = createNewCell(
-      (row = Math.floor(i / grid_col)),
-      (col = i % grid_col),
+    let cell = createNewCell(
+      (Math.floor(i / grid_col)),
+      (i % grid_col),
     );
     grid.appendChild(cell);
   }
@@ -532,3 +534,8 @@ deleteColButton.addEventListener('click', deleteCol);
 runButton.addEventListener('click', runGame);
 stopButton.addEventListener('click', stopGame);
 speedSlider.addEventListener('input', setGameSpeed);
+
+
+// STORAGE
+saveToStorage();
+console.log(loadFromStorage());
