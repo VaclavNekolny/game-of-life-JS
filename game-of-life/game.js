@@ -3,6 +3,7 @@ let gridObject = [];
 const glass = document.getElementById('gray-glass');
 
 let intervalId;
+let cursorBlinkingId;
 
 const colorPicker = document.getElementById('color-picker');
 let color = [180, 50, 50];
@@ -31,8 +32,7 @@ let grid_row = 25;
 document.documentElement.style.setProperty('--grid-col', grid_col);
 document.documentElement.style.setProperty('--grid-row', grid_row);
 
-let pointer = [4, 5];
-let selectedCell;
+let pointer = [1, 5];
 drawEmptyGrid();
 let font = fetchAlphabethBitmap();
 
@@ -99,15 +99,20 @@ function getRandomColor() {
 
 function handleKeypress(e) {
   if (e.code == 'Space') {
-    // show blinking cursor
+    // cursorOn();
+    runCursorBlinking();
+  }
+  if (e.code == 'Escape') {
+    // cursorOff();
+    stopCursorBlinking();
   }
   if (returnKeyBitmap(e.key)) {
-    renderBitmapLetter(returnKeyBitmap(e.key))
-  } 
+    renderBitmapLetter(returnKeyBitmap(e.key));
+  }
 }
 
 function returnKeyBitmap(key) {
-  return font[key] ?? null
+  return font[key] ?? null;
 }
 
 // TODO - refactor
@@ -142,7 +147,6 @@ function allowDrawing() {
   });
 }
 
-
 async function fetchAlphabethBitmap() {
   try {
     const res = await fetch('./monogram-bitmap.json');
@@ -156,6 +160,8 @@ async function fetchAlphabethBitmap() {
 }
 
 function renderBitmapLetter(letterBmp) {
+  cursorOff();
+
   let [row, col] = pointer;
 
   for (let i = 0; i < letterBmp.length; i++) {
@@ -213,22 +219,21 @@ function handleRightClick(e) {
 
   console.log(row, col);
 
-  if (e.target.classList.contains('cell')) {
-    if (!selectedCell) {
-      selectCell([row, col]);
-    } else if (selectedCell == e.target) {
-      deselectCell();
-    } else {
-      deselectCell();
-      selectCell([row, col]);
-    }
-  }
+  // if (e.target.classList.contains('cell')) {
+  //   if (!selectedCell) {
+  //     selectCell([row, col]);
+  //   } else if (selectedCell == e.target) {
+  //     deselectCell();
+  //   } else {
+  //     deselectCell();
+  //     selectCell([row, col]);
+  //   }
+  // }
 }
 
 function selectCell([row, col]) {
   const cell = document.querySelector(`div[row="${row}"][col="${col}"]`);
   cell.classList.add('selected');
-  selectedCell = cell;
 }
 
 function growSetup() {
@@ -253,11 +258,9 @@ function setArrowUp() {
   }, 200);
 }
 
-function deselectCell() {
-  if (selectedCell) {
-    selectedCell.classList.remove('selected');
-    selectedCell = null;
-  }
+function deselectCell([row, col]) {
+  const cell = document.querySelector(`div[row="${row}"][col="${col}"]`);
+  cell.classList.remove('selected');
 }
 
 function setCellRadius(e) {
@@ -461,6 +464,38 @@ function setGameSpeed(e) {
 
 function isGridEmpty(grid) {
   return !grid.flat().includes(1);
+}
+
+function cursorOn() {
+  const col = pointer[0];
+  let row = +pointer[1];
+  for (let i_row = row; i_row < row + 9; i_row++) {
+    selectCell([i_row, col]);
+  }
+}
+
+function cursorOff() {
+  const col = pointer[0];
+  let row = +pointer[1];
+  for (let i_row = row; i_row < row + 9; i_row++) {
+    deselectCell([i_row, col]);
+  }
+}
+
+function runCursorBlinking() {
+  console.log('run');
+  cursorBlinkingId = setInterval(() => {
+    cursorOn();
+    setTimeout(() => {
+      cursorOff();
+    }, 300);
+  }, 600);
+}
+
+function stopCursorBlinking() {
+  console.log('stop');
+  cursorOff()
+  clearInterval(cursorBlinkingId);
 }
 
 document.addEventListener('keydown', handleKeypress);
