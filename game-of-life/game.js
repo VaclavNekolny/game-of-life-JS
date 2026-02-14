@@ -38,7 +38,7 @@ document.documentElement.style.setProperty('--grid-row', grid_row);
 let pointer = [4, 5];
 let selectedCell;
 drawEmptyGrid();
-let font = fetchAlphabethBitmap()
+let font = fetchAlphabethBitmap();
 
 function drawEmptyGrid() {
   const grid = document.querySelector('.grid');
@@ -120,14 +120,13 @@ function handleKeypress(e) {
       deselectCell();
     }
   }
-  if (e.key === 't') {
-    growSetup();
-  }
-  allowDrawing();
+  if (returnKeyBitmap(e.key)) {
+    renderBitmapLetter(returnKeyBitmap(e.key))
+  } 
 }
 
-function doesKeyExist(key) {
-
+function returnKeyBitmap(key) {
+  return font[key] ?? null
 }
 
 function allowDrawing() {
@@ -161,20 +160,6 @@ function allowDrawing() {
   });
 }
 
-async function renderWordFromInput(e) {
-  e.preventDefault();
-  if (!input.value) {
-    console.error('Input text, please!');
-    return;
-  }
-
-  const wordArray = input.value.split('');
-  for (letter of wordArray) {
-    renderBitmapLetter(letter);
-  }
-  deselectCell();
-  // selectCell(pointer);
-}
 
 async function fetchAlphabethBitmap() {
   try {
@@ -188,11 +173,7 @@ async function fetchAlphabethBitmap() {
   }
 }
 
-async function renderBitmapLetter(letter) {
-  const letterBmp = await font[letter];
-
-  console.log('renderBitmapLetter');
-  console.log(letterBmp);
+function renderBitmapLetter(letterBmp) {
   let [row, col] = pointer;
 
   for (let i = 0; i < letterBmp.length; i++) {
