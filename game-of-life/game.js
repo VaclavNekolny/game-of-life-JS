@@ -164,19 +164,32 @@ function renderBitmapLetter(letterBmp) {
 
   let [row, col] = pointer;
 
-  for (let i = 0; i < letterBmp.length; i++) {
-    // convert to binary
-    const pixelRow = letterBmp[i].toString(2).padStart(5, '0');
-    const rowArray = pixelRow.split('').reverse(); // why I need reverse?
-    for (let j = 0; j < rowArray.length; j++) {
-      if (rowArray[j] == '1') {
-        getCell(+j + +row, +i + +col).classList.add('full');
+  try {
+    // REFACTOR!!!!
+    if (row + 5 > grid_col - 1 || col + 9 > grid_row - 1) {
+      throw new Error('out of range');
+    }
+
+    for (let i = 0; i < letterBmp.length; i++) {
+      // convert to binary
+      const pixelRow = letterBmp[i].toString(2).padStart(5, '0');
+      const rowArray = pixelRow.split('').reverse(); // why I need reverse?
+      for (let j = 0; j < rowArray.length; j++) {
+        if (rowArray[j] == '1') {
+          getCell(+j + +row, +i + +col).classList.add('full');
+        }
       }
     }
-  }
 
-  // setting new pointer
-  pointer[0] = pointer[0] + 6;
+    // setting new pointer
+    pointer[0] = pointer[0] + 6;
+  } catch {
+    showMessage('Out of range');
+  }
+}
+
+function showMessage(message) {
+  alert(message);
 }
 
 function switchMode() {
@@ -494,7 +507,7 @@ function runCursorBlinking() {
 
 function stopCursorBlinking() {
   console.log('stop');
-  cursorOff()
+  cursorOff();
   clearInterval(cursorBlinkingId);
 }
 
