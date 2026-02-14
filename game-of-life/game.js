@@ -1,7 +1,3 @@
-const runTextButton = document.getElementById('run');
-const input = document.querySelector('input');
-const textBar = document.getElementById('text-bar');
-
 const grid = document.querySelector('.grid');
 let gridObject = [];
 const glass = document.getElementById('gray-glass');
@@ -102,23 +98,8 @@ function getRandomColor() {
 }
 
 function handleKeypress(e) {
-  // Render screen
   if (e.code == 'Space') {
     // show blinking cursor
-
-    textBar.classList.add('show');
-    // Needs delay becaus input was hidden
-    setTimeout(() => {
-      input.focus();
-    }, 100);
-  }
-  if (e.key === 'Escape') {
-    if (textBar.classList.contains('show')) {
-      textBar.classList.remove('show');
-      clearInput();
-    } else {
-      deselectCell();
-    }
   }
   if (returnKeyBitmap(e.key)) {
     renderBitmapLetter(returnKeyBitmap(e.key))
@@ -129,6 +110,7 @@ function returnKeyBitmap(key) {
   return font[key] ?? null
 }
 
+// TODO - refactor
 function allowDrawing() {
   grid.addEventListener('click', (e) => {
     if (e.target.classList.contains('cell')) {
@@ -222,12 +204,6 @@ function switchMode() {
     isDarkMode = true;
   }
   glass.classList.toggle('dark-mode');
-}
-
-function clearInput() {
-  setTimeout(() => {
-    input.value = '';
-  }, 300);
 }
 
 function handleRightClick(e) {
@@ -386,7 +362,6 @@ function nextRound() {
     let newRow = [];
     for (let col = 0; col < grid_col; col++) {
       let lives = gridObject[row][col];
-      // let lives = gridObject[(row,col)]; // HOW IS THET EVEN POSSIBLE??????????
 
       const neighboursCount = countNeighbours(row, col);
 
@@ -489,7 +464,6 @@ function isGridEmpty(grid) {
 }
 
 document.addEventListener('keydown', handleKeypress);
-runTextButton.addEventListener('click', renderWordFromInput);
 document.querySelectorAll('.slider').forEach((slider) => {
   slider.addEventListener('input', getColor);
 });
