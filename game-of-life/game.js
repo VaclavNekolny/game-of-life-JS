@@ -38,6 +38,7 @@ document.documentElement.style.setProperty('--grid-row', grid_row);
 let pointer = [4, 5];
 let selectedCell;
 drawEmptyGrid();
+let font = fetchAlphabethBitmap()
 
 function drawEmptyGrid() {
   const grid = document.querySelector('.grid');
@@ -58,7 +59,7 @@ function clearGrid() {
   });
 }
 
-function magic(slide = false) {
+function magic() {
   if (!isMagicOn) {
     document.querySelectorAll('.full').forEach((cell) => {
       cell.style.backgroundColor = getRandomColor();
@@ -96,13 +97,15 @@ function getRandomColor() {
   h = h - 4 + Math.round(Math.random() * 8);
   s = s - 15 + Math.round(Math.random() * 30);
   l = l - 15 + Math.round(Math.random() * 30);
-  console.log(h, s, l);
+  // console.log(h, s, l);
   return `hsl(${h},${s}%,${l}%)`;
 }
 
 function handleKeypress(e) {
   // Render screen
   if (e.code == 'Space') {
+    // show blinking cursor
+
     textBar.classList.add('show');
     // Needs delay becaus input was hidden
     setTimeout(() => {
@@ -121,6 +124,10 @@ function handleKeypress(e) {
     growSetup();
   }
   allowDrawing();
+}
+
+function doesKeyExist(key) {
+
 }
 
 function allowDrawing() {
@@ -182,8 +189,6 @@ async function fetchAlphabethBitmap() {
 }
 
 async function renderBitmapLetter(letter) {
-  // TODO: refactor -> distinguish fetch from the function
-  const font = await fetchAlphabethBitmap();
   const letterBmp = await font[letter];
 
   console.log('renderBitmapLetter');
