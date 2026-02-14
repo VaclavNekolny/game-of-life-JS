@@ -446,8 +446,8 @@ function drawGridFromObject() {
   }
 }
 
-function handleGameRun(e) {
-  if (e.target.classList.contains('run')) {
+function handleGameRun() {
+  if (gameButton.classList.contains('run')) {
     runGame();
   } else {
     stopGame();
