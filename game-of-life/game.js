@@ -22,8 +22,7 @@ const deleteColButton = document.getElementById('delete-col');
 let isDarkMode = false;
 let isMagicOn = false;
 
-const runButton = document.getElementById('run-game');
-const stopButton = document.getElementById('stop-game');
+const gameButton = document.getElementById('game');
 let runSpeed = 200;
 const speedSlider = document.getElementById('game-speed');
 
@@ -447,7 +446,20 @@ function drawGridFromObject() {
   }
 }
 
+function handleGameRun(e) {
+  if (e.target.classList.contains('run')) {
+    runGame();
+  } else {
+    stopGame();
+  }
+  
+}
+
 function runGame() {
+  gameButton.innerHTML = 'STOP ❌';
+  gameButton.classList.add('stop');
+  gameButton.classList.remove('run');
+
   glass.classList.remove('hidden');
   disableGridAdjusting();
 
@@ -457,6 +469,11 @@ function runGame() {
 }
 
 function stopGame() {
+  gameButton.innerHTML = 'RUN 🚀';
+  gameButton.classList.add('run');
+  gameButton.classList.remove('stop');
+
+
   glass.classList.add('hidden');
   enableGridAdjusting();
 
@@ -471,7 +488,7 @@ function setGameSpeed(e) {
   console.log(runSpeed);
   if (intervalId) {
     stopGame();
-    runGame();
+    handleGameRun();
   }
 }
 
@@ -535,8 +552,7 @@ deleteRowButton.addEventListener('click', deleteRow);
 addColButton.addEventListener('click', addCol);
 deleteColButton.addEventListener('click', deleteCol);
 
-runButton.addEventListener('click', runGame);
-stopButton.addEventListener('click', stopGame);
+gameButton.addEventListener('click', handleGameRun);
 speedSlider.addEventListener('input', setGameSpeed);
 
 // STORAGE
