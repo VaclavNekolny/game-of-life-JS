@@ -31,7 +31,7 @@ let grid_row = 25;
 document.documentElement.style.setProperty('--grid-col', grid_col);
 document.documentElement.style.setProperty('--grid-row', grid_row);
 
-let pointer = [1, 5];
+let pointer = [7, 1];
 drawEmptyGrid();
 let font = fetchAlphabethBitmap();
 
@@ -69,10 +69,10 @@ function magic() {
 }
 
 function getCell(row, col) {
-  if (row > grid_col - 1 || col > grid_row - 1) {
+  if (row > grid_row - 1 || col > grid_col - 1) {
     throw new Error('out of range');
   }
-  return grid.children[col * grid_col + row];
+  return grid.querySelector(`div[row="${row}"][col="${col}"]`);
 }
 
 function getColor() {
@@ -163,9 +163,8 @@ function renderBitmapLetter(letterBmp) {
   let [row, col] = pointer;
 
   try {
-    // REFACTOR!!!!
-    if (row + 5 > grid_col - 1 || col + 9 > grid_row - 1) {
-      throw new Error('out of range');
+    if (row + 9 > grid_row || col + 5 > grid_col) {
+      throw new Error('Out of range');
     }
 
     for (let i = 0; i < letterBmp.length; i++) {
@@ -174,13 +173,16 @@ function renderBitmapLetter(letterBmp) {
       const rowArray = pixelRow.split('').reverse(); // why I need reverse?
       for (let j = 0; j < rowArray.length; j++) {
         if (rowArray[j] == '1') {
-          getCell(+j + +row, +i + +col).classList.add('full');
+          getCell(i + +row, j + +col).classList.add('full');
+        } else {
+          getCell(i + +row, j + +col).classList.remove('full');
         }
       }
     }
 
     // setting new pointer
-    pointer[0] = pointer[0] + 6;
+    pointer[1] = pointer[1] + 6;
+
   } catch {
     showMessage('Out of range');
   }
@@ -228,18 +230,8 @@ function handleRightClick(e) {
   const row = +e.target.getAttribute('row');
   const col = +e.target.getAttribute('col');
 
-  console.log(row, col);
-
-  // if (e.target.classList.contains('cell')) {
-  //   if (!selectedCell) {
-  //     selectCell([row, col]);
-  //   } else if (selectedCell == e.target) {
-  //     deselectCell();
-  //   } else {
-  //     deselectCell();
-  //     selectCell([row, col]);
-  //   }
-  // }
+  pointer = [row, col];
+  runCursorBlinking();
 }
 
 function selectCell([row, col]) {
@@ -451,7 +443,6 @@ function handleGameRun() {
   } else {
     stopGame();
   }
-  
 }
 
 function runGame() {
@@ -471,7 +462,6 @@ function stopGame() {
   gameButton.innerHTML = 'RUN 🚀';
   gameButton.classList.add('run');
   gameButton.classList.remove('stop');
-
 
   glass.classList.add('hidden');
   enableGridAdjusting();
@@ -496,35 +486,35 @@ function isGridEmpty(grid) {
 }
 
 function cursorOn() {
-  const col = pointer[0];
-  let row = +pointer[1];
+  const row = pointer[0];
+  let col = +pointer[1];
   for (let i_row = row; i_row < row + 9; i_row++) {
     selectCell([i_row, col]);
   }
 }
 
 function cursorOff() {
-  const col = pointer[0];
-  let row = +pointer[1];
-  for (let i_row = row; i_row < row + 9; i_row++) {
-    deselectCell([i_row, col]);
-  }
+  grid
+    .querySelectorAll('.selected')
+    .forEach((cell) => cell.classList.remove('selected'));
 }
 
 function runCursorBlinking() {
-  console.log('run');
+  clearInterval(cursorBlinkingId);
+
   cursorBlinkingId = setInterval(() => {
     cursorOn();
     setTimeout(() => {
       cursorOff();
-    }, 300);
-  }, 600);
+    }, 250);
+  }, 500);
 }
 
 function stopCursorBlinking() {
   console.log('stop');
   cursorOff();
   clearInterval(cursorBlinkingId);
+  cursorBlinkingId = null;
 }
 
 document.addEventListener('keydown', handleKeypress);
