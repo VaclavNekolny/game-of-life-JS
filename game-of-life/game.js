@@ -127,7 +127,6 @@ function allowDrawing() {
         }
       }
     }
-    pointer = [e.target.getAttribute('col'), e.target.getAttribute('row')];
     loadGridToObject();
   });
 
