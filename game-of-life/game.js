@@ -97,15 +97,21 @@ function getRandomColor() {
 }
 
 function handleKeypress(e) {
+  // Don'r show R on screen before reloadnig the page
+  if (event.metaKey && event.shiftKey && event.key.toLowerCase() === 'r') {
+    return;
+  }
+
   if (e.code == 'Space') {
-    // cursorOn();
-    runCursorBlinking();
+    if (!cursorBlinkingId) {
+      runCursorBlinking();
+      return;
+    }
   }
   if (e.code == 'Escape') {
-    // cursorOff();
     stopCursorBlinking();
   }
-  if (returnKeyBitmap(e.key)) {
+  if (cursorBlinkingId && returnKeyBitmap(e.key)) {
     renderBitmapLetter(returnKeyBitmap(e.key));
   }
 }
@@ -182,7 +188,6 @@ function renderBitmapLetter(letterBmp) {
 
     // setting new pointer
     pointer[1] = pointer[1] + 6;
-
   } catch {
     showMessage('Out of range');
   }
