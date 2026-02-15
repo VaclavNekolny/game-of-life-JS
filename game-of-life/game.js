@@ -4,6 +4,7 @@ const glass = document.getElementById('gray-glass');
 
 let intervalId;
 let cursorBlinkingId;
+let pointerOutBlocked = false;
 
 const colorPicker = document.getElementById('color-picker');
 let color = [180, 50, 50];
@@ -120,10 +121,14 @@ function returnKeyBitmap(key) {
   return font[key] ?? null;
 }
 
-// TODO - refactor
-function allowDrawing() {
-  grid.addEventListener('click', (e) => {
-    if (e.target.classList.contains('cell')) {
+function drawOrEraseTheCell(e) {
+  if (e.target.classList.contains('cell')) {
+    if (
+      // draw when pointer down
+      (e.type === 'pointerdown') && e.buttons == 1 ||
+      // draw when pointer over and button is clicked
+      (e.type === 'pointerover' && e.buttons > 0)
+    ) {
       e.target.classList.toggle('full');
       if (isMagicOn) {
         if (e.target.classList.contains('full')) {
@@ -132,24 +137,15 @@ function allowDrawing() {
           e.target.removeAttribute('style');
         }
       }
+      console.log(e.type);
     }
-    loadGridToObject();
-  });
+  }
 
-  grid.addEventListener('pointerover', (e) => {
-    if (e.target.classList.contains('cell') && e.buttons > 0) {
-      e.target.classList.toggle('full');
-      if (isMagicOn) {
-        if (e.target.classList.contains('full')) {
-          e.target.style.backgroundColor = getRandomColor();
-        } else {
-          e.target.removeAttribute('style');
-        }
-      }
-    }
-    loadGridToObject();
-  });
+  loadGridToObject();
 }
+
+grid.addEventListener('pointerdown', drawOrEraseTheCell);
+grid.addEventListener('pointerover', drawOrEraseTheCell);
 
 async function fetchAlphabethBitmap() {
   try {
@@ -534,7 +530,7 @@ grid.addEventListener('contextmenu', handleRightClick);
 cellRadiusSlider.addEventListener('input', setCellRadius);
 
 document.addEventListener('DOMContentLoaded', () => {
-  allowDrawing();
+  // allowDrawing();
   setArrowDown();
   switchMode();
   getColor();
