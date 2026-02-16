@@ -103,6 +103,13 @@ function handleKeypress(e) {
     return;
   }
 
+  if (e.code == 'Backspace') {
+    if (cursorBlinkingId) {
+      backspace();
+      return;
+    }
+  }
+
   if (e.code == 'Space') {
     if (!cursorBlinkingId) {
       runCursorBlinking();
@@ -125,7 +132,7 @@ function drawOrEraseTheCell(e) {
   if (e.target.classList.contains('cell')) {
     if (
       // draw when pointer down
-      (e.type === 'pointerdown') && e.buttons == 1 ||
+      (e.type === 'pointerdown' && e.buttons == 1) ||
       // draw when pointer over and button is clicked
       (e.type === 'pointerover' && e.buttons > 0)
     ) {
@@ -175,17 +182,62 @@ function renderBitmapLetter(letterBmp) {
       const rowArray = pixelRow.split('').reverse(); // why I need reverse?
       for (let j = 0; j < rowArray.length; j++) {
         if (rowArray[j] == '1') {
-          getCell(i + +row, j + +col).classList.add('full');
+          const cell = getCell(i + +row, j + +col)
+          cell.classList.add('full');
+          if(isMagicOn) {
+            cell.style.backgroundColor = getRandomColor()
+          }
         } else {
-          getCell(i + +row, j + +col).classList.remove('full');
+          const cell = getCell(i + +row, j + +col)
+          cell.classList.remove('full');
+          if(isMagicOn) {
+            cell.removeAttribute('style')
+          }
         }
       }
     }
 
     // setting new pointer
+    oneLineSpace(row, col + 5)
     pointer[1] = pointer[1] + 6;
   } catch {
     showMessage('Out of range');
+  }
+}
+
+function backspace() {
+  cursorOff();
+
+  let [row, col] = pointer;
+  console.log(row, col);
+
+  if (col - 6 < 0) {
+    throw new Error('Out of range');
+  }
+
+  for (let i = 0; i < 9; i++) {
+    for (let j = 0; j > -5; j--) {
+      console.log('row: ', row + i, ' col: ', col + j);
+      const cell = getCell(i + +row, j + +col)
+      cell.classList.remove('full');
+      if (isMagicOn) {
+        cell.removeAttribute('style')
+      }
+    }
+  }
+
+  // setting new pointer
+  oneLineSpace(row, col - 5);
+  pointer[1] = pointer[1] - 6;
+}
+
+function oneLineSpace(row, col) {
+  for (let i = 0; i < 9; i++) {
+    const cell = getCell(i + row, col)
+    cell.classList.remove('full');
+    if(isMagicOn) {
+      cell.removeAttribute('style')
+    }
   }
 }
 
