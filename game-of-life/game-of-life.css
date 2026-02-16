@@ -52,7 +52,7 @@ body {
   flex-direction: column;
 }
 #color-picker {
-  height: 150px;
+  height: 145px;
   display: flex;
   flex-direction: column;
   gap: 25px;
