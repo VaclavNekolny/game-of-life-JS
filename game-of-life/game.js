@@ -199,6 +199,7 @@ function renderBitmapLetter(letterBmp) {
 
     // setting new pointer
     oneLineSpace(row, col + 5)
+    oneLineSpace(row, col + 6)
     pointer[1] = pointer[1] + 6;
   } catch {
     showMessage('Out of range');
@@ -228,6 +229,7 @@ function backspace() {
 
   // setting new pointer
   oneLineSpace(row, col - 5);
+  oneLineSpace(row, col - 6);
   pointer[1] = pointer[1] - 6;
 }
 
