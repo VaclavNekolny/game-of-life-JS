@@ -72,13 +72,13 @@ body {
 #color-picker input[type='range'] {
   -webkit-appearance: none;
   appearance: none;
-  background-color: hsla(0, 0%, 0%, 0); 
+  background-color: hsla(0, 0%, 0%, 0);
 }
 
 #color-picker input[type='range']::-webkit-slider-runnable-track {
-    height: 10px;
-    background: var(--color);
-    border-radius: 10px;
+  height: 10px;
+  background: var(--color);
+  border-radius: 10px;
 }
 
 #color-picker input[type='range']::-webkit-slider-thumb {
@@ -184,7 +184,7 @@ body {
   right: 0px;
   flex-direction: column;
   align-items: center;
-    .adj {
+  .adj {
     border-radius: 5px 0 0 5px;
   }
 }
@@ -219,4 +219,39 @@ body {
 
 .hidden {
   visibility: hidden;
+}
+
+#message {
+  position: absolute;
+  z-index: 10;
+  bottom: 20px;
+  right: 20px;
+  background-color: white;
+  padding: 10px 20px;
+  border-radius: var(--cell-border-radius);
+  box-shadow: 5px 5px 5px var(--color-light-transparent);
+  transition:
+    opacity 300ms ease,
+    transform 300ms ease;
+  transform: translateY(0);
+  pointer-events: auto;
+  opacity: 1;
+}
+
+#message.success {
+  background-color: rgb(132, 211, 132);
+}
+
+#message.info {
+  background-color: rgb(132, 133, 211);
+}
+
+#message.error {
+  background-color: rgb(207, 117, 117);
+}
+
+#message.hidden {
+  opacity: 0;
+  transform: translateY(8px);
+  pointer-events: none;
 }

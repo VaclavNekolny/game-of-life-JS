@@ -662,3 +662,15 @@ function loadFromStorage() {
     drawGridFromObject(gameData.grid);
   }
 }
+
+function message(text, type){
+  const messageElement = document.getElementById('message')
+  messageElement.classList.add(type)
+  messageElement.innerHTML = text
+  messageElement.classList.remove('hidden')
+  
+  setTimeout(() => {
+    messageElement.classList.add('hidden')
+  }, 1200)
+
+}
