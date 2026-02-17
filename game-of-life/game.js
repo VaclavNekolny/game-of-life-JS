@@ -119,6 +119,9 @@ function handleKeypress(e) {
   if (e.code == 'Escape') {
     stopCursorBlinking();
   }
+  if (e.code == 'Enter') {
+    handleGameRun();
+  }
   if (cursorBlinkingId && returnKeyBitmap(e.key)) {
     renderBitmapLetter(returnKeyBitmap(e.key));
   }
@@ -182,24 +185,24 @@ function renderBitmapLetter(letterBmp) {
       const rowArray = pixelRow.split('').reverse(); // why I need reverse?
       for (let j = 0; j < rowArray.length; j++) {
         if (rowArray[j] == '1') {
-          const cell = getCell(i + +row, j + +col)
+          const cell = getCell(i + +row, j + +col);
           cell.classList.add('full');
-          if(isMagicOn) {
-            cell.style.backgroundColor = getRandomColor()
+          if (isMagicOn) {
+            cell.style.backgroundColor = getRandomColor();
           }
         } else {
-          const cell = getCell(i + +row, j + +col)
+          const cell = getCell(i + +row, j + +col);
           cell.classList.remove('full');
-          if(isMagicOn) {
-            cell.removeAttribute('style')
+          if (isMagicOn) {
+            cell.removeAttribute('style');
           }
         }
       }
     }
 
     // setting new pointer
-    oneLineSpace(row, col + 5)
-    oneLineSpace(row, col + 6)
+    oneLineSpace(row, col + 5);
+    oneLineSpace(row, col + 6);
     pointer[1] = pointer[1] + 6;
   } catch {
     showMessage('Out of range');
@@ -219,10 +222,10 @@ function backspace() {
   for (let i = 0; i < 9; i++) {
     for (let j = 0; j > -5; j--) {
       console.log('row: ', row + i, ' col: ', col + j);
-      const cell = getCell(i + +row, j + +col)
+      const cell = getCell(i + +row, j + +col);
       cell.classList.remove('full');
       if (isMagicOn) {
-        cell.removeAttribute('style')
+        cell.removeAttribute('style');
       }
     }
   }
@@ -235,10 +238,10 @@ function backspace() {
 
 function oneLineSpace(row, col) {
   for (let i = 0; i < 9; i++) {
-    const cell = getCell(i + row, col)
+    const cell = getCell(i + row, col);
     cell.classList.remove('full');
-    if(isMagicOn) {
-      cell.removeAttribute('style')
+    if (isMagicOn) {
+      cell.removeAttribute('style');
     }
   }
 }
@@ -494,6 +497,7 @@ function drawGridFromObject() {
 
 function handleGameRun() {
   if (gameButton.classList.contains('run')) {
+    stopCursorBlinking();
     runGame();
   } else {
     stopGame();
