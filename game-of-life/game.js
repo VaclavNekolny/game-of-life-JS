@@ -98,6 +98,7 @@ function getRandomColor() {
 }
 
 function handleKeypress(e) {
+  console.log(e.key);
   // Don'r show R on screen before reloadnig the page
   if (event.metaKey && event.shiftKey && event.key.toLowerCase() === 'r') {
     return;
@@ -122,8 +123,25 @@ function handleKeypress(e) {
   if (e.code == 'Enter') {
     handleGameRun();
   }
+  if (e.key.startsWith('Arrow')){
+    moveCursor(e.key)
+  }
   if (cursorBlinkingId && returnKeyBitmap(e.key)) {
     renderBitmapLetter(returnKeyBitmap(e.key));
+  }
+}
+
+function moveCursor(direction) {
+  if (direction == 'ArrowUp') {
+    pointer = [pointer[0] - 1, pointer[1]];
+  } else if (direction == 'ArrowDown') {
+    pointer = [pointer[0] + 1, pointer[1]];
+  }
+  if (direction == 'ArrowLeft') {
+    pointer = [pointer[0], pointer[1] - 1];
+  }
+  if (direction == 'ArrowRight') {
+    pointer = [pointer[0], pointer[1] + 1];
   }
 }
 
