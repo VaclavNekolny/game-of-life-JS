@@ -298,7 +298,7 @@ function switchMode() {
   if (isDarkMode) {
     document.documentElement.style.setProperty(
       '--body-background',
-      'hsl(36, 83%, 88%)',
+      'hsl(36, 90%, 88%)',
     );
     document.documentElement.style.setProperty(
       '--cell-background',
@@ -306,14 +306,14 @@ function switchMode() {
     );
     document.documentElement.style.setProperty(
       '--cell-border-color',
-      'hsla(36, 60%, 80%, 0.5)',
+      'hsla(36, 60%, 80%, 0.3)',
     );
     isDarkMode = false;
     message('Light mode', 'success')
   } else {
     document.documentElement.style.setProperty(
       '--body-background',
-      'hsl(36, 5%, 10%)',
+      'hsl(36, 9%, 14%)',
     );
     document.documentElement.style.setProperty(
       '--cell-background',
@@ -321,7 +321,7 @@ function switchMode() {
     );
     document.documentElement.style.setProperty(
       '--cell-border-color',
-      'hsla(36, 7%, 7%, 0.5)',
+      'hsla(36, 8%, 10%, 0.45)',
     );
     isDarkMode = true;
     message('Dark mode', 'success')
