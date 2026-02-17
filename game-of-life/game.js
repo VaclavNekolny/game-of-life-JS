@@ -2,7 +2,7 @@ const grid = document.querySelector('.grid');
 let gridObject = [];
 const glass = document.getElementById('gray-glass');
 
-let intervalId;
+let gameRunId;
 let cursorBlinkingId;
 let pointerOutBlocked = false;
 
@@ -117,9 +117,19 @@ function handleKeypress(e) {
   }
   if (e.code == 'Escape') {
     stopCursorBlinking();
+    stopGame();
   }
-  if (e.code == 'Enter') {
+  if (e.code == 'Enter' || (e.key == 'r' && !cursorBlinkingId))  {
     handleGameRun();
+  }
+  if (e.key.toLowerCase() == 'm' && !cursorBlinkingId) {
+    switchMode()
+  }
+  if (e.key.toLowerCase() == 'c' && !cursorBlinkingId && !gameRunId) {
+    clearGrid()
+  }
+  if (e.key.toLowerCase() == 'g' && !cursorBlinkingId) {
+    magic()
   }
   if (e.key.startsWith('Arrow') && cursorBlinkingId) {
     moveCursor(e.key);
@@ -540,9 +550,9 @@ function runGame() {
   glass.classList.remove('hidden');
   disableGridAdjusting();
 
-  clearInterval(intervalId);
+  clearInterval(gameRunId);
   loadGridToObject();
-  intervalId = setInterval(nextRound, runSpeed);
+  gameRunId = setInterval(nextRound, runSpeed);
 }
 
 function stopGame() {
@@ -553,15 +563,15 @@ function stopGame() {
   glass.classList.add('hidden');
   enableGridAdjusting();
 
-  clearInterval(intervalId);
-  intervalId = null;
+  clearInterval(gameRunId);
+  gameRunId = null;
   saveToStorage();
 }
 
 function setGameSpeed(e) {
   const speeds = [2000, 1000, 700, 400, 300, 200, 100, 50];
   runSpeed = speeds[+e.target.value];
-  if (intervalId) {
+  if (gameRunId) {
     stopGame();
     handleGameRun();
   }
