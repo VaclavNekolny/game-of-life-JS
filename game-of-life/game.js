@@ -53,6 +53,7 @@ function clearGrid() {
       cell.removeAttribute('style');
     }
   });
+  message('Grid cleared 🧹', 'success')
 }
 
 function magic() {
@@ -61,11 +62,13 @@ function magic() {
       cell.style.backgroundColor = getRandomColor();
     });
     isMagicOn = true;
+    message('Magic ON 🪄', 'success')
   } else {
     document.querySelectorAll('.full').forEach((cell) => {
       cell.removeAttribute('style');
     });
     isMagicOn = false;
+    message('Magic OFF 🪄', 'success')
   }
 }
 
@@ -117,7 +120,9 @@ function handleKeypress(e) {
   }
   if (e.code == 'Escape') {
     stopCursorBlinking();
-    stopGame();
+    if (gameRunId){
+      stopGame();
+    }
   }
   if (e.code == 'Enter' || (e.key == 'r' && !cursorBlinkingId))  {
     handleGameRun();
@@ -170,6 +175,7 @@ function nextLine() {
     pointer[0] = pointer[0] + 9;
     pointer[1] = 1;
   } else {
+    message('Not enough space in the bottom', 'error')
     throw new Error('Not enough space in the bottom');
   }
 }
@@ -303,6 +309,7 @@ function switchMode() {
       'hsla(36, 60%, 80%, 0.5)',
     );
     isDarkMode = false;
+    message('Light mode', 'success')
   } else {
     document.documentElement.style.setProperty(
       '--body-background',
@@ -317,6 +324,7 @@ function switchMode() {
       'hsla(36, 7%, 7%, 0.5)',
     );
     isDarkMode = true;
+    message('Dark mode', 'success')
   }
   glass.classList.toggle('dark-mode');
 }
@@ -553,19 +561,21 @@ function runGame() {
   clearInterval(gameRunId);
   loadGridToObject();
   gameRunId = setInterval(nextRound, runSpeed);
+  message('Game running 🚀', 'success')
 }
 
 function stopGame() {
   gameButton.innerHTML = 'RUN 🚀';
   gameButton.classList.add('run');
   gameButton.classList.remove('stop');
-
+  
   glass.classList.add('hidden');
   enableGridAdjusting();
-
+  
   clearInterval(gameRunId);
   gameRunId = null;
   saveToStorage();
+  message('Game stopped ❌', 'success')
 }
 
 function setGameSpeed(e) {
@@ -622,9 +632,9 @@ document.getElementById('magic').addEventListener('click', magic);
 arrow.addEventListener('click', growSetup);
 grid.addEventListener('contextmenu', handleRightClick);
 cellRadiusSlider.addEventListener('input', setCellRadius);
+cellRadiusSlider.addEventListener('pointerup', (e) => message(`Cell radius: ${e.target.value/Math.floor(e.target.max) * 100}%`, 'success'));
 
 document.addEventListener('DOMContentLoaded', () => {
-  // allowDrawing();
   setArrowDown();
   switchMode();
   getColor();
@@ -638,6 +648,7 @@ deleteColButton.addEventListener('click', deleteCol);
 
 gameButton.addEventListener('click', handleGameRun);
 speedSlider.addEventListener('input', setGameSpeed);
+speedSlider.addEventListener('pointerup', (e) => message(`Game speed: ${e.target.value}`, 'success'))
 
 // STORAGE
 function saveToStorage() {
@@ -663,14 +674,14 @@ function loadFromStorage() {
   }
 }
 
-function message(text, type){
+function message(text, type, timeout = 1200){
   const messageElement = document.getElementById('message')
+  messageElement.removeAttribute('class')
   messageElement.classList.add(type)
   messageElement.innerHTML = text
-  messageElement.classList.remove('hidden')
   
   setTimeout(() => {
     messageElement.classList.add('hidden')
-  }, 1200)
+  }, timeout)
 
 }
