@@ -93,12 +93,10 @@ function getRandomColor() {
   h = h - 4 + Math.round(Math.random() * 8);
   s = s - 15 + Math.round(Math.random() * 30);
   l = l - 15 + Math.round(Math.random() * 30);
-  // console.log(h, s, l);
   return `hsl(${h},${s}%,${l}%)`;
 }
 
 function handleKeypress(e) {
-  console.log(e.key);
   // Don'r show R on screen before reloadnig the page
   if (event.metaKey && event.shiftKey && event.key.toLowerCase() === 'r') {
     return;
@@ -123,8 +121,8 @@ function handleKeypress(e) {
   if (e.code == 'Enter') {
     handleGameRun();
   }
-  if (e.key.startsWith('Arrow')){
-    moveCursor(e.key)
+  if (e.key.startsWith('Arrow') && cursorBlinkingId) {
+    moveCursor(e.key);
   }
   if (cursorBlinkingId && returnKeyBitmap(e.key)) {
     renderBitmapLetter(returnKeyBitmap(e.key));
@@ -134,14 +132,35 @@ function handleKeypress(e) {
 function moveCursor(direction) {
   if (direction == 'ArrowUp') {
     pointer = [pointer[0] - 1, pointer[1]];
+    if (pointer[0] < 0) {
+      pointer[0] = grid_row - 9;
+    }
   } else if (direction == 'ArrowDown') {
     pointer = [pointer[0] + 1, pointer[1]];
+    if (pointer[0] + 9 > grid_row) {
+      pointer[0] = 0;
+    }
   }
   if (direction == 'ArrowLeft') {
     pointer = [pointer[0], pointer[1] - 1];
+    if (pointer[1] < 0) {
+      pointer[1] = grid_col - 1;
+    }
   }
   if (direction == 'ArrowRight') {
     pointer = [pointer[0], pointer[1] + 1];
+    if (pointer[1] > grid_col - 1) {
+      pointer[1] = 0;
+    }
+  }
+}
+
+function nextLine() {
+  if (pointer[0] + 17 < grid_row) {
+    pointer[0] = pointer[0] + 9;
+    pointer[1] = 1;
+  } else {
+    throw new Error('Not enough space in the bottom');
   }
 }
 
@@ -165,7 +184,6 @@ function drawOrEraseTheCell(e) {
           e.target.removeAttribute('style');
         }
       }
-      console.log(e.type);
     }
   }
 
@@ -192,46 +210,43 @@ function renderBitmapLetter(letterBmp) {
 
   let [row, col] = pointer;
 
-  try {
-    if (row + 9 > grid_row || col + 5 > grid_col) {
-      throw new Error('Out of range');
+  if (col + 5 > grid_col) {
+    try {
+      nextLine();
+    } catch (error) {
+      console.error(error);
     }
+  }
 
-    for (let i = 0; i < letterBmp.length; i++) {
-      // convert to binary
-      const pixelRow = letterBmp[i].toString(2).padStart(5, '0');
-      const rowArray = pixelRow.split('').reverse(); // why I need reverse?
-      for (let j = 0; j < rowArray.length; j++) {
-        if (rowArray[j] == '1') {
-          const cell = getCell(i + +row, j + +col);
-          cell.classList.add('full');
-          if (isMagicOn) {
-            cell.style.backgroundColor = getRandomColor();
-          }
-        } else {
-          const cell = getCell(i + +row, j + +col);
-          cell.classList.remove('full');
-          if (isMagicOn) {
-            cell.removeAttribute('style');
-          }
+  for (let i = 0; i < letterBmp.length; i++) {
+    // convert to binary
+    const pixelRow = letterBmp[i].toString(2).padStart(5, '0');
+    const rowArray = pixelRow.split('').reverse(); // why I need reverse?
+    for (let j = 0; j < rowArray.length; j++) {
+      if (rowArray[j] == '1') {
+        const cell = getCell(i + +row, j + +col);
+        cell.classList.add('full');
+        if (isMagicOn) {
+          cell.style.backgroundColor = getRandomColor();
+        }
+      } else {
+        const cell = getCell(i + +row, j + +col);
+        cell.classList.remove('full');
+        if (isMagicOn) {
+          cell.removeAttribute('style');
         }
       }
     }
-
-    // setting new pointer
-    oneLineSpace(row, col + 5);
-    oneLineSpace(row, col + 6);
-    pointer[1] = pointer[1] + 6;
-  } catch {
-    showMessage('Out of range');
   }
+  oneLineSpace(row, col + 5);
+  oneLineSpace(row, col + 6);
+  pointer[1] = pointer[1] + 6;
 }
 
 function backspace() {
   cursorOff();
 
   let [row, col] = pointer;
-  console.log(row, col);
 
   if (col - 6 < 0) {
     throw new Error('Out of range');
@@ -239,7 +254,6 @@ function backspace() {
 
   for (let i = 0; i < 9; i++) {
     for (let j = 0; j > -5; j--) {
-      console.log('row: ', row + i, ' col: ', col + j);
       const cell = getCell(i + +row, j + +col);
       cell.classList.remove('full');
       if (isMagicOn) {
@@ -262,10 +276,6 @@ function oneLineSpace(row, col) {
       cell.removeAttribute('style');
     }
   }
-}
-
-function showMessage(message) {
-  alert(message);
 }
 
 function switchMode() {
@@ -551,7 +561,6 @@ function stopGame() {
 function setGameSpeed(e) {
   const speeds = [2000, 1000, 700, 400, 300, 200, 100, 50];
   runSpeed = speeds[+e.target.value];
-  console.log(runSpeed);
   if (intervalId) {
     stopGame();
     handleGameRun();
@@ -588,7 +597,6 @@ function runCursorBlinking() {
 }
 
 function stopCursorBlinking() {
-  console.log('stop');
   cursorOff();
   clearInterval(cursorBlinkingId);
   cursorBlinkingId = null;
