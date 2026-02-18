@@ -1,3 +1,125 @@
+const initGrid = [
+  [
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  ],
+  [
+    0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  ],
+  [
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  ],
+  [
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  ],
+  [
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  ],
+  [
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  ],
+  [
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  ],
+  [
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  ],
+  [
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  ],
+  [
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  ],
+  [
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  ],
+  [
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  ],
+  [
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  ],
+  [
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  ],
+  [
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  ],
+  [
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  ],
+  [
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  ],
+  [
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  ],
+  [
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0,
+  ],
+  [
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0,
+  ],
+  [
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0,
+  ],
+  [
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0,
+  ],
+  [
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0,
+  ],
+  [
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  ],
+  [
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  ],
+  [
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  ],
+  [
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  ],
+  [
+    0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0,
+  ],
+  [
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  ],
+  [
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  ],
+];
 const grid = document.querySelector('.grid');
 let gridObject = [];
 const glass = document.getElementById('gray-glass');
@@ -27,8 +149,8 @@ const gameButton = document.getElementById('game');
 let runSpeed = 200;
 const speedSlider = document.getElementById('game-speed');
 
-let grid_col = 40;
-let grid_row = 25;
+let grid_col = 50;
+let grid_row = 30;
 document.documentElement.style.setProperty('--grid-col', grid_col);
 document.documentElement.style.setProperty('--grid-row', grid_row);
 
@@ -53,7 +175,7 @@ function clearGrid() {
       cell.removeAttribute('style');
     }
   });
-  message('Grid cleared 🧹', 'success')
+  message('Grid cleared 🧹', 'success');
 }
 
 function magic() {
@@ -62,13 +184,13 @@ function magic() {
       cell.style.backgroundColor = getRandomColor();
     });
     isMagicOn = true;
-    message('Magic ON 🪄', 'success')
+    message('Magic ON 🪄', 'success');
   } else {
     document.querySelectorAll('.full').forEach((cell) => {
       cell.removeAttribute('style');
     });
     isMagicOn = false;
-    message('Magic OFF 🪄', 'success')
+    message('Magic OFF 🪄', 'success');
   }
 }
 
@@ -120,21 +242,21 @@ function handleKeypress(e) {
   }
   if (e.code == 'Escape') {
     stopCursorBlinking();
-    if (gameRunId){
+    if (gameRunId) {
       stopGame();
     }
   }
-  if (e.code == 'Enter' || (e.key == 'r' && !cursorBlinkingId))  {
+  if (e.code == 'Enter' || (e.key == 'r' && !cursorBlinkingId)) {
     handleGameRun();
   }
   if (e.key.toLowerCase() == 'm' && !cursorBlinkingId) {
-    switchMode()
+    switchMode();
   }
   if (e.key.toLowerCase() == 'c' && !cursorBlinkingId && !gameRunId) {
-    clearGrid()
+    clearGrid();
   }
   if (e.key.toLowerCase() == 'g' && !cursorBlinkingId) {
-    magic()
+    magic();
   }
   if (e.key.startsWith('Arrow') && cursorBlinkingId) {
     moveCursor(e.key);
@@ -175,7 +297,7 @@ function nextLine() {
     pointer[0] = pointer[0] + 9;
     pointer[1] = 1;
   } else {
-    message('Not enough space in the bottom', 'error')
+    message('Not enough space in the bottom', 'error');
     throw new Error('Not enough space in the bottom');
   }
 }
@@ -219,6 +341,10 @@ async function fetchAlphabethBitmap() {
   } catch (error) {
     console.error('Error loading font:', error);
   }
+}
+
+function delay(ms) {
+  return new Promise((res) => setTimeout(res, ms));
 }
 
 function renderBitmapLetter(letterBmp) {
@@ -309,7 +435,7 @@ function switchMode() {
       'hsla(36, 60%, 80%, 0.3)',
     );
     isDarkMode = false;
-    message('Light mode', 'success')
+    message('Light mode', 'success');
   } else {
     document.documentElement.style.setProperty(
       '--body-background',
@@ -324,7 +450,7 @@ function switchMode() {
       'hsla(36, 8%, 10%, 0.45)',
     );
     isDarkMode = true;
-    message('Dark mode', 'success')
+    message('Dark mode', 'success');
   }
   glass.classList.toggle('dark-mode');
 }
@@ -525,11 +651,11 @@ function countNeighbours(row, col) {
   return counter;
 }
 
-function drawGridFromObject() {
+function drawGridFromObject(innerGridObject = gridObject) {
   for (const cell of grid.children) {
     const row = +cell.getAttribute('row');
     const col = +cell.getAttribute('col');
-    if (gridObject[row][col]) {
+    if (innerGridObject[row][col]) {
       cell.classList.add('full');
       if (isMagicOn) {
         cell.style.backgroundColor = getRandomColor();
@@ -561,26 +687,31 @@ function runGame() {
   clearInterval(gameRunId);
   loadGridToObject();
   gameRunId = setInterval(nextRound, runSpeed);
-  message('Game running 🚀', 'success')
+  message('Game running 🚀', 'success');
 }
 
 function stopGame() {
   gameButton.innerHTML = 'RUN 🚀';
   gameButton.classList.add('run');
   gameButton.classList.remove('stop');
-  
+
   glass.classList.add('hidden');
   enableGridAdjusting();
-  
+
   clearInterval(gameRunId);
   gameRunId = null;
   saveToStorage();
-  message('Game stopped ❌', 'success')
+  message('Game stopped ❌', 'success');
 }
 
 function setGameSpeed(e) {
-  const speeds = [2000, 1000, 700, 400, 300, 200, 100, 50];
-  runSpeed = speeds[+e.target.value];
+  console.log(typeof e);
+  if (typeof e === 'object') {
+    const speeds = [2000, 1000, 700, 400, 300, 200, 100, 50];
+    runSpeed = speeds[+e.target.value];
+  } else {
+    runSpeed = +e;
+  }
   if (gameRunId) {
     stopGame();
     handleGameRun();
@@ -632,7 +763,12 @@ document.getElementById('magic').addEventListener('click', magic);
 arrow.addEventListener('click', growSetup);
 grid.addEventListener('contextmenu', handleRightClick);
 cellRadiusSlider.addEventListener('input', setCellRadius);
-cellRadiusSlider.addEventListener('pointerup', (e) => message(`Cell radius: ${e.target.value/Math.floor(e.target.max) * 100}%`, 'success'));
+cellRadiusSlider.addEventListener('pointerup', (e) =>
+  message(
+    `Cell radius: ${(e.target.value / Math.floor(e.target.max)) * 100}%`,
+    'success',
+  ),
+);
 
 document.addEventListener('DOMContentLoaded', () => {
   setArrowDown();
@@ -648,7 +784,9 @@ deleteColButton.addEventListener('click', deleteCol);
 
 gameButton.addEventListener('click', handleGameRun);
 speedSlider.addEventListener('input', setGameSpeed);
-speedSlider.addEventListener('pointerup', (e) => message(`Game speed: ${e.target.value}`, 'success'))
+speedSlider.addEventListener('pointerup', (e) =>
+  message(`Game speed: ${e.target.value}`, 'success'),
+);
 
 // STORAGE
 function saveToStorage() {
@@ -674,14 +812,124 @@ function loadFromStorage() {
   }
 }
 
-function message(text, type, timeout = 1200){
-  const messageElement = document.getElementById('message')
-  messageElement.removeAttribute('class')
-  messageElement.classList.add(type)
-  messageElement.innerHTML = text
-  
-  setTimeout(() => {
-    messageElement.classList.add('hidden')
-  }, timeout)
+function message(text, type, timeout = 1200) {
+  const messageElement = document.getElementById('message');
+  messageElement.removeAttribute('class');
+  messageElement.classList.add(type);
+  messageElement.innerHTML = text;
 
+  setTimeout(() => {
+    messageElement.classList.add('hidden');
+  }, timeout);
+}
+
+async function instructions() {
+  drawGridFromObject(initGrid);
+  runCursorBlinking();
+  let letters = ['W', 'r', 'i', 't', 'e'];
+  for (const letter of letters) {
+    const bmp = returnKeyBitmap(letter);
+    if (bmp) renderBitmapLetter(bmp);
+    await delay(100);
+  }
+
+  await delay(1000);
+
+  for (let i = 0; i < 5; i++) {
+    backspace();
+    await delay(100);
+  }
+
+  letters = ['D', 'r', 'a', 'w'];
+  for (const letter of letters) {
+    const bmp = returnKeyBitmap(letter);
+    if (bmp) renderBitmapLetter(bmp);
+    await delay(100);
+  }
+
+  await delay(1000);
+
+  for (let i = 0; i < 4; i++) {
+    backspace();
+    await delay(100);
+  }
+
+  letters = ['S', 'w', 'i', 't', 'c', 'h'];
+  for (const letter of letters) {
+    const bmp = returnKeyBitmap(letter);
+    if (bmp) renderBitmapLetter(bmp);
+    await delay(70);
+  }
+  nextLine();
+  delay(500);
+  letters = ['m', 'o', 'd', 'e'];
+  for (const letter of letters) {
+    const bmp = returnKeyBitmap(letter);
+    if (bmp) renderBitmapLetter(bmp);
+    await delay(70);
+  }
+  await delay(700);
+  switchMode();
+  await delay(700);
+  switchMode();
+  await delay(700);
+  switchMode();
+  await delay(700);
+  switchMode();
+  await delay(400);
+
+  for (let i = 0; i < 4; i++) {
+    backspace();
+    await delay(70);
+  }
+  pointer = [7, 37];
+  for (let i = 0; i < 6; i++) {
+    backspace();
+    await delay(70);
+  }
+
+  letters = ['D', 'o', ' ', 'm', 'a', 'g', 'i', 'c'];
+  for (const letter of letters) {
+    const bmp = returnKeyBitmap(letter);
+    if (bmp) renderBitmapLetter(bmp);
+    await delay(70);
+  }
+  magic();
+  await delay(1000);
+
+  for (let i = 0; i < 8; i++) {
+    backspace();
+    await delay(70);
+  }
+  // Let it live
+  letters = ['L', 'e', 't', ' ', 'i', 't'];
+  for (const letter of letters) {
+    const bmp = returnKeyBitmap(letter);
+    if (bmp) renderBitmapLetter(bmp);
+    await delay(80);
+  }
+  nextLine();
+
+  letters = ['l', 'i', 'v', 'e', '!'];
+  for (const letter of letters) {
+    const bmp = returnKeyBitmap(letter);
+    if (bmp) renderBitmapLetter(bmp);
+    await delay(80);
+  }
+
+  await delay(800);
+
+  setTimeout(() => {
+    stopGame();
+  }, 6000);
+  setTimeout(() => {
+    clearGrid();
+    message('show instructions');
+    setGameSpeed(200);
+  }, 7000);
+
+  stopCursorBlinking();
+  pointer = [7, 1];
+  setGameSpeed(40);
+  runGame();
 }
